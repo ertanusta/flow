@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::connection('core')->create('applications', function (Blueprint $table) {
             $table->id();
-            $table->string('module')->unique();
+            $table->string('module_name')->unique();
             $table->string('name');
             $table->timestamps();
         });

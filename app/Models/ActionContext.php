@@ -11,7 +11,7 @@ class ActionContext extends CoreModels
     protected $table = "action_contexts";
 
     protected $fillable = [
-        'module',
+        'application_id',
         'module_id',
         'context',
         'trigger_context_id',

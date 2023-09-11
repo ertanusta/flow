@@ -11,8 +11,8 @@ class TriggerContext extends CoreModels
     protected $table = "trigger_contexts";
 
     protected $fillable = [
-        'module',
         'module_id',
+        'application_id',
         'flow_id',
         'condition',
         'name'

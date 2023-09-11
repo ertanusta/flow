@@ -8,7 +8,8 @@ class Action extends AbstractModel
     protected $fillable = [
         'name',
         'class',
-        'context'
+        'context',
+        'identifier'
     ];
     protected $casts = [
         'context' => 'array'

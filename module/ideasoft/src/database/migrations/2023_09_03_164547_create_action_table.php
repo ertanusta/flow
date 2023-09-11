@@ -17,6 +17,7 @@ return new class extends Migration
             ->create('actions', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
+                $table->string('identifier');
                 $table->text('class');
                 $table->json('context');
                 $table->timestamps();

@@ -13,16 +13,20 @@ return new class extends Migration
     {
         Schema::connection('core')->create('action_contexts', function (Blueprint $table) {
             $table->id();
-            $table->string('module');
             $table->string('name');
             $table->unsignedBigInteger('module_id');
+            $table->unsignedBigInteger('application_id');
+            $table->foreign('application_id')
+                ->references('id')
+                ->on('applications')
+                ->onDelete("cascade");
             $table->text('context');
             $table->unsignedBigInteger('trigger_context_id');
             $table->foreign('trigger_context_id')
                 ->references('id')
                 ->on('trigger_contexts')
                 ->onDelete('cascade');
-            $table->index(['module','module_id']);
+            $table->index(['application_id','module_id']);
             $table->timestamps();
         });
     }

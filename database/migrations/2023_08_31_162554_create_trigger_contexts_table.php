@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::connection('core')->create('trigger_contexts', function (Blueprint $table) {
             $table->id();
-            $table->string('module');
+            $table->unsignedBigInteger('application_id');
+            $table->foreign('application_id')
+                ->references('id')
+                ->on('applications')
+                ->onDelete("cascade");
             $table->unsignedBigInteger('module_id');
             $table->unsignedBigInteger('flow_id');
             $table->string('name');
@@ -22,7 +26,7 @@ return new class extends Migration
                 ->on('flows')
                 ->onDelete('cascade');
             $table->text('condition');
-            $table->index(['module','module_id']);
+            $table->index(['application_id','module_id']);
             $table->timestamps();
         });
     }

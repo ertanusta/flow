@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,9 +12,10 @@ return new class extends Migration
     {
         Schema::connection('core')->create('flows', function (Blueprint $table) {
             $table->id();
-            $table->string('trigger_module');
             $table->unsignedBigInteger('trigger_module_id');
             $table->string('name');
+            $table->boolean('status');
+            $table->unsignedBigInteger('working_count')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
@@ -27,7 +27,8 @@ return new class extends Migration
                 ->on('applications')
                 ->onDelete("cascade");
             $table->timestamps();
-            $table->index(['trigger_module','trigger_module_id']);
+            $table->index(['application_id', 'trigger_module_id']);
+            $table->unique(['trigger_module_id', 'application_id']);
         });
     }
 
