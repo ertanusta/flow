@@ -2,12 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Models\TriggerContext;
 use App\Services\Interfaces\FlowServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Redis;
+use RuleEngine\Facades\RuleEngine;
 
 class FlowResolverJobs implements ShouldQueue
 {
@@ -43,6 +46,17 @@ class FlowResolverJobs implements ShouldQueue
         FlowServiceInterface $flowService
     ): void
     {
-        $flowService->getById($this->flowId);
+       $flow =  $flowService->getById($this->flowId);
+       $triggerContexts = $flow->getTriggerConditions()->get();
+       /** @var TriggerContext $triggerContext */
+        foreach ($triggerContexts as $triggerContext) {
+           if (RuleEngine::evaluate($triggerContext->condition,$this->data)){
+               $actionContexts = $triggerContext->getActionContext()->get();
+               foreach ($actionContexts as $actionContext){
+                   // todo: applicationın action işlemini gerçekleştirecek yere gönder
+                   Redis::connection('core')->publish();
+               }
+           }
+       }
     }
 }

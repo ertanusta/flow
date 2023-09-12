@@ -23,7 +23,7 @@ class Flow extends CoreModels
 
     public function getTriggerConditions()
     {
-        return $this->hasOne(
+        return $this->hasMany(
             TriggerContext::class,
             'flow_id',
             'id'
