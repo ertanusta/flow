@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\Interfaces\FlowServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -38,10 +39,10 @@ class FlowResolverJobs implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(
+        FlowServiceInterface $flowService
+    ): void
     {
-        /**
-         *
-         */
+        $flowService->getById($this->flowId);
     }
 }

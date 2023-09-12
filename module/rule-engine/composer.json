@@ -1,0 +1,24 @@
+{
+    "name": "flow/rule-engine",
+    "type": "library",
+    "require": {
+        "symfony/expression-language": "^6.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "RuleEngine\\": "src/app/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RuleEngine\\Providers\\RuleEngineProvider"
+            ],
+            "aliases": {
+                "RuleEngine": "RuleEngine\\Facades\\RuleEngine"
+            }
+        }
+    },
+    "minimum-stability": "stable"
+}

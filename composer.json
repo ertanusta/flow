@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.1",
         "flow/ideasoft": "^1.0",
+        "flow/rule-engine": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
@@ -73,6 +74,15 @@
             "options": {
                 "versions": {
                     "flow/ideasoft": "1.0"
+                }
+            }
+        },
+        {
+            "type": "path",
+            "url": "module/rule-engine",
+            "options": {
+                "versions": {
+                    "flow/rule-engine": "1.0"
                 }
             }
         }
