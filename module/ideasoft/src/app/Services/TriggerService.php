@@ -2,10 +2,10 @@
 
 namespace Ideasoft\Services;
 
+use Ideasoft\Contracts\Repository\TriggerRepositoryInterface;
+use Ideasoft\Contracts\Services\TriggerServiceInterface;
 use Ideasoft\Exceptions\ResourceNotFoundException;
 use Ideasoft\Models\Trigger;
-use Ideasoft\Repository\Interfaces\TriggerRepositoryInterface;
-use Ideasoft\Services\Interfaces\TriggerServiceInterface;
 
 class TriggerService implements TriggerServiceInterface
 {

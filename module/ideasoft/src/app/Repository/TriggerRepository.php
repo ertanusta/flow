@@ -2,8 +2,8 @@
 
 namespace Ideasoft\Repository;
 
+use Ideasoft\Contracts\Repository\TriggerRepositoryInterface;
 use Ideasoft\Models\Trigger;
-use Ideasoft\Repository\Interfaces\TriggerRepositoryInterface;
 
 class TriggerRepository implements TriggerRepositoryInterface
 {

@@ -23,11 +23,21 @@ class ActionContext extends CoreModels
         return $this->hasOne(
             TriggerContext::class,
             'trigger_context_id',
-            'id');
+            'id'
+        );
     }
 
     public function getFlow()
     {
         return $this->getTriggerContext()->first()->getFlow();
+    }
+
+    public function getApplication()
+    {
+        return $this->hasOne(
+            Application::class,
+            'id',
+            'application_id'
+        );
     }
 }

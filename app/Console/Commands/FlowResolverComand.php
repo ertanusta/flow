@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\FlowResolverJobs;
+use App\Contracts\Services\CommunicationServiceInterface;
+use App\Jobs\FlowResolverJob;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Redis;
 
 class FlowResolverComand extends Command
 {
@@ -21,21 +21,28 @@ class FlowResolverComand extends Command
      * @var string
      */
     protected $description = 'Command description';
+    private CommunicationServiceInterface $communicationService;
 
-    /**
-     * Execute the console command.
-     */
+    public function __construct(CommunicationServiceInterface $communicationService)
+    {
+        parent::__construct();
+        $this->communicationService = $communicationService;
+    }
+
     public function handle()
     {
-        Redis::connection('core')->subscribe(['flow-resolve'], function (string $message) {
-            $data = json_decode($message, true, 512, JSON_THROW_ON_ERROR);
-            FlowResolverJobs::dispatch(
-                $data['userId'],
-                $data['flowId'],
-                $data['applicationId'],
-                $data['triggerId'],
-                $data['data']
-            );
-        });
+        $this->communicationService->subscriberFlowResolver(
+            function (string $message) {
+                $data = json_decode($message, true, 512, JSON_THROW_ON_ERROR);
+                FlowResolverJob::dispatch(
+                    $data['userId'],
+                    $data['flowId'],
+                    $data['applicationId'],
+                    $data['triggerId'],
+                    $data['data']
+                );
+            }
+        );
+
     }
 }

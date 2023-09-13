@@ -2,8 +2,8 @@
 
 namespace Ideasoft\Repository;
 
+use Ideasoft\Contracts\Repository\AuthenticationRepositoryInterface;
 use Ideasoft\Models\Authentication;
-use Ideasoft\Repository\Interfaces\AuthenticationRepositoryInterface;
 
 class AuthenticationRepository implements AuthenticationRepositoryInterface
 {

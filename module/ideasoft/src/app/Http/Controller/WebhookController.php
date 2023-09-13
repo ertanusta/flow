@@ -3,7 +3,7 @@
 namespace Ideasoft\Http\Controller;
 
 use Ideasoft\Helper\HashHelper;
-use Ideasoft\Jobs\HookJobs;
+use Ideasoft\Jobs\HookJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -18,7 +18,7 @@ class WebhookController extends Controller
             Config::get('clients.ideasoft.client_secret')
         );
         if (HashHelper::isValid($requestHash, $createdHash)) {
-            HookJobs::dispatch(
+            HookJob::dispatch(
                 $request->query->get('authId'),
                 $request->toArray()
             );

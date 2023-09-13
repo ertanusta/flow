@@ -1,6 +1,6 @@
 <?php
 
-namespace Ideasoft\Services\Interfaces;
+namespace Ideasoft\Contracts\Services;
 
 use Ideasoft\Models\Trigger;
 

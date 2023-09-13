@@ -2,18 +2,18 @@
 
 namespace Ideasoft\Jobs;
 
+use Ideasoft\Contracts\Services\AuthenticationServiceInterface;
+use Ideasoft\Contracts\Services\CommunicationServiceInterface;
+use Ideasoft\Contracts\Services\FlowServiceInterface;
+use Ideasoft\Contracts\Services\TriggerServiceInterface;
 use Ideasoft\Exceptions\ResourceNotFoundException;
-use Ideasoft\Services\Interfaces\AuthenticationServiceInterface;
-use Ideasoft\Services\Interfaces\CommunicationServiceInterface;
-use Ideasoft\Services\Interfaces\FlowServiceInterface;
-use Ideasoft\Services\Interfaces\TriggerServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class HookJobs implements ShouldQueue
+class HookJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

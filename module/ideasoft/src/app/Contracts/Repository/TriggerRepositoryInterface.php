@@ -1,6 +1,6 @@
 <?php
 
-namespace Ideasoft\Repository\Interfaces;
+namespace Ideasoft\Contracts\Repository;
 
 use Ideasoft\Models\Trigger;
 

@@ -3,7 +3,7 @@
 namespace Ideasoft\Repository;
 
 use App\Models\Flow;
-use Ideasoft\Repository\Interfaces\FlowRepositoryInterface;
+use Ideasoft\Contracts\Repository\FlowRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class FlowRepository implements FlowRepositoryInterface

@@ -2,7 +2,7 @@
 
 namespace Ideasoft\Services;
 
-use Ideasoft\Services\Interfaces\CommunicationServiceInterface;
+use Ideasoft\Contracts\Services\CommunicationServiceInterface;
 use Illuminate\Support\Facades\Redis;
 
 class CommunicationService implements CommunicationServiceInterface
@@ -14,5 +14,10 @@ class CommunicationService implements CommunicationServiceInterface
             'flow-resolve',
             json_encode($data, JSON_THROW_ON_ERROR)
         );
+    }
+
+    public function subscriberActionResolver(\Closure $callback)
+    {
+        Redis::connection('core')->subscribe(['ideasoft-action-resolver'], $callback);
     }
 }

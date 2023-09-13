@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
+use App\Contracts\Repository\FlowRepositoryInterface;
 use App\Models\Flow;
-use App\Repository\Interfaces\FlowRepositoryInterface;
 
 class FlowRepository implements FlowRepositoryInterface
 {

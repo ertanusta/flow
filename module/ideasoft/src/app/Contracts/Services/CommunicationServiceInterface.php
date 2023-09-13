@@ -1,8 +1,10 @@
 <?php
 
-namespace Ideasoft\Services\Interfaces;
+namespace Ideasoft\Contracts\Services;
 
 interface CommunicationServiceInterface
 {
     public function publishCoreFlowResolver(array $data);
+
+    public function subscriberActionResolver(\Closure $callback);
 }

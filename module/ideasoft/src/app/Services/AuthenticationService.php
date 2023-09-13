@@ -2,9 +2,9 @@
 
 namespace Ideasoft\Services;
 
+use Ideasoft\Contracts\Services\AuthenticationServiceInterface;
 use Ideasoft\Exceptions\ResourceNotFoundException;
 use Ideasoft\Models\Authentication;
-use Ideasoft\Services\Interfaces\AuthenticationServiceInterface;
 
 class AuthenticationService implements AuthenticationServiceInterface
 {

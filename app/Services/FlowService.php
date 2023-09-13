@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Contracts\Repository\FlowRepositoryInterface;
+use App\Contracts\Services\FlowServiceInterface;
 use App\Exceptions\ResourceNotFound;
 use App\Models\Flow;
-use App\Repository\Interfaces\FlowRepositoryInterface;
-use App\Services\Interfaces\FlowServiceInterface;
 
 class FlowService implements FlowServiceInterface
 {

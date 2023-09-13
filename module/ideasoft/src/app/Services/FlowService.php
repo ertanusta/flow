@@ -3,9 +3,9 @@
 namespace Ideasoft\Services;
 
 use App\Models\Flow;
+use Ideasoft\Contracts\Repository\FlowRepositoryInterface;
+use Ideasoft\Contracts\Services\FlowServiceInterface;
 use Ideasoft\Exceptions\ResourceNotFoundException;
-use Ideasoft\Repository\Interfaces\FlowRepositoryInterface;
-use Ideasoft\Services\Interfaces\FlowServiceInterface;
 
 class FlowService implements FlowServiceInterface
 {
