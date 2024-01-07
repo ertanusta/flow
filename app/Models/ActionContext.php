@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ActionContext extends CoreModels
+class ActionContext extends AbstractModels
 {
     use HasFactory;
 

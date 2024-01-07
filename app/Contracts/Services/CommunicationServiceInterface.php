@@ -4,7 +4,7 @@ namespace App\Contracts\Services;
 
 interface CommunicationServiceInterface
 {
-    public function publisModuleActionResolver($moduleName, array $data);
+    public function publishModuleActionResolver($moduleName, array $data);
 
-    public function subscriberFlowResolver(\Closure $callback);
+    public function subscribeFlowResolver(\Closure $callback);
 }

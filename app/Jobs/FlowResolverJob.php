@@ -55,20 +55,26 @@ class FlowResolverJob implements ShouldQueue
             if (!RuleEngine::evaluate($triggerContext->condition, $this->data)) {
                 continue;
             }
-            $actionContexts = $triggerContext->getActionContext()->get();
-            /** @var ActionContext $actionContext */
-            foreach ($actionContexts as $actionContext) {
-                $moduleName = $actionContext->getApplication()->first()->name;
-                $communicationService->publisModuleActionResolver(
-                    $moduleName,
-                    [
-                        'triggerData' => $this->data,
-                        'context' => $actionContext->context,
-                        'userId' => $this->userId,
-                        'flowId' => $this->flowId
-                    ]
-                );
-            }
+            $this->publishModuleAction($triggerContext, $communicationService);
+        }
+    }
+
+    private function publishModuleAction(TriggerContext $triggerContext, CommunicationServiceInterface $communicationService)
+    {
+        $actionContexts = $triggerContext->getActionContext()->get();
+        /** @var ActionContext $actionContext */
+        foreach ($actionContexts as $actionContext) {
+            $moduleName = $actionContext->getApplication()->first()->name;
+            $communicationService->publishModuleActionResolver(
+                $moduleName,
+                [
+                    'triggerData' => $this->data,
+                    'context' => $actionContext->context,
+                    'actionId' => $actionContext->module_id,
+                    'userId' => $this->userId,
+                    'flowId' => $this->flowId
+                ]
+            );
         }
     }
 }

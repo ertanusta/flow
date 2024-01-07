@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Application extends CoreModels
+class Application extends AbstractModels
 {
     use HasFactory;
 

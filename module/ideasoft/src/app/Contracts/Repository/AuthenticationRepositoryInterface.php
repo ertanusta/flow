@@ -7,4 +7,6 @@ use Ideasoft\Models\Authentication;
 interface AuthenticationRepositoryInterface
 {
     public function getById($id): ?Authentication;
+
+    public function getByUserId($userId): ?Authentication;
 }

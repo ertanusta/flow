@@ -30,9 +30,7 @@ class HookJob implements ShouldQueue
         $this->hookData = $hookData;
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
+
     public function handle(
         TriggerServiceInterface        $triggerService,
         AuthenticationServiceInterface $authenticationService,
@@ -43,7 +41,7 @@ class HookJob implements ShouldQueue
         $authentication = $authenticationService->getById($this->authenticationId);
         $triggerIdentifier = $triggerService->getNameByHookData(current($this->hookData));
         $triggerModel = $triggerService->getTriggerByName($triggerIdentifier);
-
+        //todo:  bu işlem bana mı ait kontrol et
         $flowModel = $flowService->getByModule(
             $authentication->user_id,
             $triggerModel->id,

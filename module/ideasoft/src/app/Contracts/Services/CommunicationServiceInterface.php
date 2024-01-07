@@ -6,5 +6,5 @@ interface CommunicationServiceInterface
 {
     public function publishCoreFlowResolver(array $data);
 
-    public function subscriberActionResolver(\Closure $callback);
+    public function subscribeActionResolver(\Closure $callback);
 }

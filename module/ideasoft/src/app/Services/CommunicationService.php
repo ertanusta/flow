@@ -10,14 +10,17 @@ class CommunicationService implements CommunicationServiceInterface
 
     public function publishCoreFlowResolver(array $data)
     {
+        //todo: burasını redis pub sub değil de job a ata
         Redis::connection('core')->publish(
             'flow-resolve',
             json_encode($data, JSON_THROW_ON_ERROR)
         );
     }
 
-    public function subscriberActionResolver(\Closure $callback)
+    public function subscribeActionResolver(\Closure $callback)
     {
-        Redis::connection('core')->subscribe(['ideasoft-action-resolver'], $callback);
+        $callback(
+            Redis::connection('core')->client()->rPop('ideasoft-action-resolver', 100)
+        );
     }
 }

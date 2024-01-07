@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 
-class Flow extends CoreModels
+class Flow extends AbstractModels
 {
     use HasFactory;
 

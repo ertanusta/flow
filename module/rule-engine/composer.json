@@ -2,7 +2,7 @@
     "name": "flow/rule-engine",
     "type": "library",
     "require": {
-        "symfony/expression-language": "^6.3"
+        "symfony/expression-language": "^5.4"
     },
     "license": "MIT",
     "autoload": {
