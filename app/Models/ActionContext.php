@@ -11,33 +11,10 @@ class ActionContext extends AbstractModels
     protected $table = "action_contexts";
 
     protected $fillable = [
-        'application_id',
-        'module_id',
         'context',
-        'trigger_context_id',
-        'name'
+        'condition_id',
+        'application_id',
+        'action_id',
+        'action_name'
     ];
-
-    public function getTriggerContext()
-    {
-        return $this->hasOne(
-            TriggerContext::class,
-            'trigger_context_id',
-            'id'
-        );
-    }
-
-    public function getFlow()
-    {
-        return $this->getTriggerContext()->first()->getFlow();
-    }
-
-    public function getApplication()
-    {
-        return $this->hasOne(
-            Application::class,
-            'id',
-            'application_id'
-        );
-    }
 }

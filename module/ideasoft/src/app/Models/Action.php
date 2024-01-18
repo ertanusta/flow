@@ -7,11 +7,12 @@ class Action extends AbstractModel
     protected $table = 'actions';
     protected $fillable = [
         'name',
-        'class',
-        'context',
-        'identifier'
+        'application_id',
+        'identifier',
+        'fields',
+        'cost'
     ];
     protected $casts = [
-        'context' => 'array'
+        'fields' => 'array'
     ];
 }

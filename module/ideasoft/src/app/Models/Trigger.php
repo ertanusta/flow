@@ -12,11 +12,11 @@ class Trigger extends AbstractModel
     protected $table = 'triggers';
     protected $fillable = [
         'name',
+        'application_id',
         'identifier',
-        'class',
-        'context'
+        'fields',
     ];
     protected $casts = [
-        'context' => 'array'
+        'fields' => 'array'
     ];
 }

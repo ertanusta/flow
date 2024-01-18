@@ -11,22 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('core')->create('trigger_contexts', function (Blueprint $table) {
+        Schema::connection('core')->create('action_contexts', function (Blueprint $table) {
             $table->id();
+            $table->longText('context');
+            $table->unsignedBigInteger('condition_id');
+            $table->foreign('condition_id')
+                ->references('id')
+                ->on('conditions')
+                ->onDelete("cascade");
             $table->unsignedBigInteger('application_id');
             $table->foreign('application_id')
                 ->references('id')
                 ->on('applications')
                 ->onDelete("cascade");
-            $table->unsignedBigInteger('module_id');
-            $table->unsignedBigInteger('flow_id');
-            $table->string('name');
-            $table->foreign('flow_id')
-                ->references('id')
-                ->on('flows')
-                ->onDelete('cascade');
-            $table->text('condition');
-            $table->index(['application_id','module_id']);
+            $table->unsignedBigInteger('action_id');
+            $table->string('action_name');
             $table->timestamps();
         });
     }
@@ -36,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trigger_contexts');
+        Schema::dropIfExists('action_contexts');
     }
 };

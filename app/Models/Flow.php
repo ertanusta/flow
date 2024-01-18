@@ -13,20 +13,12 @@ class Flow extends AbstractModels
     protected $table = "flows";
 
     protected $fillable = [
-        'trigger_module_id',
         'name',
         'user_id',
         'application_id',
+        'trigger_id',
+        'trigger_name',
         'status',
         'working_count'
     ];
-
-    public function getTriggerConditions()
-    {
-        return $this->hasMany(
-            TriggerContext::class,
-            'flow_id',
-            'id'
-        );
-    }
 }

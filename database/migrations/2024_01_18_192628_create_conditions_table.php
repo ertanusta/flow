@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('core')->create('applications', function (Blueprint $table) {
+        Schema::connection('core')->create('conditions', function (Blueprint $table) {
             $table->id();
-            $table->string('identifier')->unique();
-            $table->string('name');
+            $table->unsignedBigInteger('flow_id');
+            $table->mediumText('condition');
+            $table->foreign('flow_id')
+                ->references('id')
+                ->on('flows')
+                ->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('core')->dropIfExists('applications');
+        Schema::dropIfExists('conditions');
     }
 };

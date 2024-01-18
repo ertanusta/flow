@@ -12,14 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection(
-            'ideasoft'
+            'core'
         )
             ->create('triggers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('identifier');
-            $table->text('class');
-            $table->json('context');
+                $table->string('name');
+                $table->unsignedBigInteger('application_id');
+                $table->foreign('application_id')
+                    ->references('id')
+                    ->on('applications')
+                    ->onDelete("cascade");
+                $table->string('identifier');
+                $table->json('fields');
             $table->timestamps();
         });
     }

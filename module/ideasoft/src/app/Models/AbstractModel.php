@@ -9,7 +9,6 @@ abstract class AbstractModel extends Model
 {
     public function getConnectionName()
     {
-        return parent::getConnectionName();
-       // return Config::get('ideasoft.connection.ideasoft');
+        return Config::get('database.connection.core');
     }
 }

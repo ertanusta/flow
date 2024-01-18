@@ -12,14 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection(
-            'ideasoft'
+            'core'
         )
-            ->create('actions', function (Blueprint $table) {
+            ->create('ideasoft_actions', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
+                $table->unsignedBigInteger('application_id');
+                $table->foreign('application_id')
+                    ->references('id')
+                    ->on('applications')
+                    ->onDelete("cascade");
                 $table->string('identifier');
-                $table->text('class');
-                $table->json('context');
+                $table->json('fields');
+                $table->decimal('cost');
                 $table->timestamps();
             });
     }

@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Application extends AbstractModels
+class Condition extends AbstractModels
 {
     use HasFactory;
 
-    protected $table = "applications";
+    protected $table = "conditions";
 
     protected $fillable = [
-        'identifier',
-        'name'
+        'flow_id',
+        'condition'
     ];
-
 }
