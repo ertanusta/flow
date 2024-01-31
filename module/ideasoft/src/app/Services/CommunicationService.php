@@ -2,25 +2,49 @@
 
 namespace Ideasoft\Services;
 
+use Ideasoft\Constants\AppConstants;
 use Ideasoft\Contracts\Services\CommunicationServiceInterface;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Http;
 
 class CommunicationService implements CommunicationServiceInterface
 {
 
-    public function publishCoreFlowResolver(array $data)
+    public function findFlow($userId, $applicationId, $triggerId)
     {
-        //todo: burasını redis pub sub değil de job a ata
-        Redis::connection('core')->publish(
-            'flow-resolve',
-            json_encode($data, JSON_THROW_ON_ERROR)
-        );
+        $query = [
+            'userId' => $userId,
+            'applicationId' => $applicationId,
+            'triggerId' => $triggerId
+        ];
+        $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/flow/find', $query);
+        $response->throw();
+        return $response->json();
     }
 
-    public function subscribeActionResolver(\Closure $callback)
+    public function checkCredit($userId)
     {
-        $callback(
-            Redis::connection('core')->client()->rPop('ideasoft-action-resolver', 100)
-        );
+        $query = ['userId' => $userId];
+        $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/user/check-credit', $query);
+        $response->throw();
+        return $response->json();
+    }
+
+    public function findCondition($flowId)
+    {
+        $query = ['flowId' => $flowId];
+        $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/condition/find', $query);
+        $response->throw();
+        $response = $response->json();
+        return $response;
+    }
+
+    public function findActions($conditionId)
+    {
+        // TODO: Iburayı yaz
+    }
+
+    public function decrementCredit($userId, $cost)
+    {
+        // TODO: burayı yaz
     }
 }

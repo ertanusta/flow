@@ -26,6 +26,7 @@ return new class extends Migration
                 ->onDelete("cascade");
             $table->unsignedBigInteger('action_id');
             $table->string('action_name');
+            $table->string('application_name');
             $table->timestamps();
         });
     }

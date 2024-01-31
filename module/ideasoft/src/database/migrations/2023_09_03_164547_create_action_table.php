@@ -17,11 +17,6 @@ return new class extends Migration
             ->create('ideasoft_actions', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
-                $table->unsignedBigInteger('application_id');
-                $table->foreign('application_id')
-                    ->references('id')
-                    ->on('applications')
-                    ->onDelete("cascade");
                 $table->string('identifier');
                 $table->json('fields');
                 $table->decimal('cost');

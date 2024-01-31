@@ -4,12 +4,13 @@ namespace Ideasoft\Jobs\Actions\Product;
 
 use Ideasoft\Contracts\Client\ClientInterface;
 use Ideasoft\Contracts\Services\AuthenticationServiceInterface;
+use Ideasoft\Message;
+use Ideasoft\Models\Authentication;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 
 class ProductUpdate implements ShouldQueue
 {
@@ -17,16 +18,14 @@ class ProductUpdate implements ShouldQueue
 
     public $connection = "ideasoft_queue";
 
-    public $queue = "ideasoft_product_actions";
-    private $data;
-    private $userId;
-    private $flowId;
+    public $queue = "ideasoft_product_update_action";
 
-    public function __construct($message)
+    private Message $message;
+
+
+    public function __construct(Message $message)
     {
-        $this->data = $message['data'];
-        $this->userId = $message['userId'];
-        $this->flowId = $message['flowId'];
+        $this->message = $message;
     }
 
     public function handle(
@@ -34,6 +33,17 @@ class ProductUpdate implements ShouldQueue
         AuthenticationServiceInterface $authenticationService
     )
     {
-        $authentication = $authenticationService->getByUserId($this->userId);
+
+        /**
+         * Authentication modeli refresh et
+         * Authentication model eğer expire olmuş ise access token renew et
+         * Rule engine i çalıştırıp gönderilecek data hazırlanmalı
+         * İstek gönderilmeden önce gönderilecek data message objesine set edilmeli
+         * İstek gönderildikten sonra kredi düşürülmeli
+         */
+        /**
+         *
+         */
+        $response = $client->put();
     }
 }

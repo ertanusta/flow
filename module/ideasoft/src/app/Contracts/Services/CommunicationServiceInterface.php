@@ -4,7 +4,13 @@ namespace Ideasoft\Contracts\Services;
 
 interface CommunicationServiceInterface
 {
-    public function publishCoreFlowResolver(array $data);
+    public function findFlow($userId, $applicationId, $triggerId);
 
-    public function subscribeActionResolver(\Closure $callback);
+    public function checkCredit($userId);
+
+    public function findCondition($flowId);
+
+    public function findActions($conditionId);
+
+    public function decrementCredit($userId,$cost);
 }

@@ -2,19 +2,23 @@
 
 namespace Ideasoft\Models;
 
-use Ideasoft\Models\AbstractModel;
 
 /**
  * class Trigger
+ * @property integer $id
+ * @property string $name
+ * @property string $identifier
+ * @property boolean $is_reader
+ * @property array $fields
  */
 class Trigger extends AbstractModel
 {
     protected $table = 'triggers';
     protected $fillable = [
         'name',
-        'application_id',
         'identifier',
         'fields',
+        'is_reader'
     ];
     protected $casts = [
         'fields' => 'array'

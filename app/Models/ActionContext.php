@@ -14,6 +14,7 @@ class ActionContext extends AbstractModels
         'context',
         'condition_id',
         'application_id',
+        'application_name',
         'action_id',
         'action_name'
     ];

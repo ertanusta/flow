@@ -34,3 +34,4 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(func
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/internal.php';
