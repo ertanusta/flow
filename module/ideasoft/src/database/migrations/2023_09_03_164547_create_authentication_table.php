@@ -20,7 +20,7 @@ return new class extends Migration {
                 $table->text('access_token');
                 $table->text('refresh_token');
                 $table->text('domain');
-                $table->unsignedInteger('expire_time');
+                $table->unsignedInteger('expire_at');
                 $table->timestamps();
             });
     }

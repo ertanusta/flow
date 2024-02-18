@@ -5,12 +5,12 @@ namespace Ideasoft\Jobs\Actions\Product;
 use Ideasoft\Contracts\Client\ClientInterface;
 use Ideasoft\Contracts\Services\AuthenticationServiceInterface;
 use Ideasoft\Message;
-use Ideasoft\Models\Authentication;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use RuleEngine\Facades\RuleEngine;
 
 class ProductUpdate implements ShouldQueue
 {
@@ -21,6 +21,10 @@ class ProductUpdate implements ShouldQueue
     public $queue = "ideasoft_product_update_action";
 
     private Message $message;
+
+    private $data = [
+        'productUpdate için gerekli olan bilgiler burada olacak'
+    ];
 
 
     public function __construct(Message $message)
@@ -34,16 +38,22 @@ class ProductUpdate implements ShouldQueue
     )
     {
 
-        /**
-         * Authentication modeli refresh et
-         * Authentication model eğer expire olmuş ise access token renew et
-         * Rule engine i çalıştırıp gönderilecek data hazırlanmalı
-         * İstek gönderilmeden önce gönderilecek data message objesine set edilmeli
-         * İstek gönderildikten sonra kredi düşürülmeli
-         */
-        /**
-         *
-         */
-        $response = $client->put();
+        $authentication = $authenticationService->refreshAccessToken($this->message->getAuthentication());
+        $data = RuleEngine::evaluate($this->message->getActionContext(), [
+            'action' => $this->data, 'trigger' => $this->message->getActionContext()
+        ]);
+
+        //todo: burada datanın kullanıcı tarafından doldurulmasını bekliyorum aslında
+        // context tarafı burada kullanıcından gelecek o yüzden null bırakılan alanları temizlemk lazım
+        foreach ($data as $key => $value){
+            if ($value === null){
+                unset($data[$key]);
+            }
+        }
+        $id = $data['id'];
+        unset($data['id']);
+        $response = $client->put($authentication,'/admin-api/products',$id,$data);
+
+        //todo: burada kredi düşürülmeli bu işlem için bir API servisi hazırlayıp düzenlemek kolay olacaktır.
     }
 }

@@ -30,7 +30,7 @@ class Message
     private $avaibleCredit;
     private $status;
     private $message;
-    private $actionData;
+    private $actionContext;
 
     public function __construct($message)
     {
@@ -357,17 +357,17 @@ class Message
     /**
      * @return mixed
      */
-    public function getActionData()
+    public function getActionContext()
     {
-        return $this->actionData;
+        return $this->actionContext;
     }
 
     /**
-     * @param mixed $actionData
+     * @param mixed $actionContext
      */
-    public function setActionData($actionData): void
+    public function setActionContext($actionContext): void
     {
-        $this->actionData = $actionData;
+        $this->actionContext = $actionContext;
     }
 
     public function check()

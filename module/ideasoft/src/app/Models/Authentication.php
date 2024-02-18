@@ -21,6 +21,6 @@ class Authentication extends AbstractModel implements AuthenticationInterface
         'access_token',
         'refresh_token',
         'domain',
-        'expire_time'
+        'expire_at'
     ];
 }

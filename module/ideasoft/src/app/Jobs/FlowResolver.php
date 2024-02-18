@@ -53,13 +53,6 @@ class FlowResolver implements ShouldQueue
             $this->message->setStatus(MessageStatus::TrueConditionNotExists);
             return;
         }
-        /**
-         * 1- Conditionları bul
-         * 2- Conditionları çözümle
-         * 3- Şartı sağlanayanların actionlarını bul
-         * 4- Bana ait ise yine bana gönder,
-         * 5- Değil ise core a gönder o halleder.
-         */
     }
 
     private function parseActionContext($actionContexts)
@@ -73,6 +66,7 @@ class FlowResolver implements ShouldQueue
                 $this->message->setActionName($actionContext['action_name']);
                 $this->message->setActionApplicationName($actionContext['application_name']);
                 $this->message->setStatus(MessageStatus::ActionDispatched);
+                $this->message->setActionContext($actionContext['context']);
                 ActionResolver::dispatch($this->message);
                 continue;
             }
