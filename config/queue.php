@@ -71,6 +71,15 @@ return [
             'after_commit' => false,
         ],
 
+        'ideasoft_queue' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'ideasoft_message_receiver',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+
     ],
 
     /*

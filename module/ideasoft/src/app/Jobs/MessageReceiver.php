@@ -19,9 +19,7 @@ class MessageReceiver implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $connection = "ideasoft_queue";
 
-    public $queue = "ideasoft_message_receiver";
     private $authenticationId;
     private $data;
     private $identifier;
@@ -41,6 +39,7 @@ class MessageReceiver implements ShouldQueue
         /** @var Authentication|null $authenticationModel */
         $authenticationModel = Authentication::query()->find($this->authenticationId);
         if (!$authenticationModel) {
+            dd("authentication bulunamadı");
             /**
              * todo: burada webhook veya reader nereden geldiğine göre kayıt silinecek.
              */
@@ -49,18 +48,17 @@ class MessageReceiver implements ShouldQueue
         $message->setAuthentication($authenticationModel);
         $message->setUserId($authenticationModel->user_id);
         //todo: burayı toparla credit objesi gelsin
-        $checkCredit = $communicationService->checkCredit($authenticationModel->user_id);
-        $message->setAvaibleCredit($checkCredit['credit']);
+        $checkCreditResult = $communicationService->checkCredit($authenticationModel->user_id);
+        $message->setAvaibleCredit($checkCreditResult['credit']);
         //kredi bilgisi gelecek
-        if ($checkCredit['credit'] <= 0) {
+        if ($checkCreditResult['available'] <= 0) {
             $message->setStatus(MessageStatus::InsufficientFunds);
             return;
         }
-
-
         if (MessageCheckHelper::checkSelfTrigger($this->data, $authenticationModel->user_id)) {
+            //todo: burayı mutlaka kontrol et.
             $message->setStatus(MessageStatus::SelfTriggeredMessage);
-            return;
+            //return;
         }
         /** @var Trigger|null $triggerModel */
         $triggerModel = Trigger::query()->where('identifier', $this->identifier)->first();

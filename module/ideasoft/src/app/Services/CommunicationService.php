@@ -18,7 +18,7 @@ class CommunicationService implements CommunicationServiceInterface
         ];
         $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/flow/find', $query);
         $response->throw();
-        return $response->json();
+        return $response->json()['data'];
     }
 
     public function checkCredit($userId)

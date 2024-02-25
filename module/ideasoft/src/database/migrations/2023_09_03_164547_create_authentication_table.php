@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::connection(
             'core'
         )
-            ->create('authentications', function (Blueprint $table) {
+            ->create('ideasoft_authentications', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('user_id');
                 $table->unsignedBigInteger('application_id');

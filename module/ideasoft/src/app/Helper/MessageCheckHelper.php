@@ -9,6 +9,7 @@ class MessageCheckHelper
 {
     public static function checkSelfTrigger($data, $userId)
     {
+        return true; //todo: sonrasında mutlaka kontrol et
         $text = "";
         if (!is_array($data)) {
             $text = $data;

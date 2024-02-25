@@ -14,7 +14,7 @@ use Ideasoft\Contracts\Models\AuthenticationInterface;
  */
 class Authentication extends AbstractModel implements AuthenticationInterface
 {
-    protected $table = "authentications";
+    protected $table = "ideasoft_authentications";
     protected $fillable = [
         'user_id',
         'application_id',

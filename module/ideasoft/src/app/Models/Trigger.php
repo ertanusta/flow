@@ -13,7 +13,7 @@ namespace Ideasoft\Models;
  */
 class Trigger extends AbstractModel
 {
-    protected $table = 'triggers';
+    protected $table = 'ideasoft_triggers';
     protected $fillable = [
         'name',
         'identifier',

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::connection(
             'core'
         )
-            ->create('triggers', function (Blueprint $table) {
+            ->create('ideasoft_triggers', function (Blueprint $table) {
             $table->id();
                 $table->string('name');
                 $table->string('identifier');

@@ -10,7 +10,7 @@ namespace Ideasoft\Models;
  */
 class Action extends AbstractModel
 {
-    protected $table = 'actions';
+    protected $table = 'ideasoft_actions';
     protected $fillable = [
         'name',
         'identifier',

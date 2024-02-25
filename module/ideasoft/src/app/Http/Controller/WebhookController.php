@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 class WebhookController extends Controller
 {
-    public function hook(Request $request)
+    public function productUpdateHook(Request $request)
     {
         $requestHash = $request->headers->get('hash');
         $createdHash = HashHelper::create(
@@ -19,11 +19,15 @@ class WebhookController extends Controller
             Config::get('clients.ideasoft.client_secret')
         );
         if (HashHelper::isValid($requestHash, $createdHash)) {
-            MessageReceiver::dispatch(
-                $request->query->get('authId'),
-                $request->toArray()['data'],
-                TriggerConstants::PRODUCT_UPDATE // her biriin ayrı bir urli olacak neticede
-            );
+            try {
+                MessageReceiver::dispatch(
+                    $request->query->get('authId'),
+                    $request->toArray()['data'],
+                    TriggerConstants::PRODUCT_UPDATE // her biriin ayrı bir urli olacak neticede
+                );
+            }catch (\Exception $exception){
+                dd($exception);
+            }
         }
         return Response::json();
     }
