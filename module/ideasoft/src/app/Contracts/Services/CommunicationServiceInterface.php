@@ -8,7 +8,7 @@ interface CommunicationServiceInterface
 
     public function checkCredit($userId);
 
-    public function findCondition($flowId);
+    public function findConditions($flowId);
 
     public function findActions($conditionId);
 

@@ -3,9 +3,13 @@
 namespace App\Providers;
 
 use App\Contracts\Services\CommunicationServiceInterface;
+use App\Contracts\Services\Internal\ActionContextServiceInterface;
+use App\Contracts\Services\Internal\ConditionServceInterface;
 use App\Contracts\Services\Internal\CreditServiceInterface;
 use App\Contracts\Services\Internal\FlowServiceInterface;
 use App\Services\CommunicationService;
+use App\Services\Internal\ActionContextService;
+use App\Services\Internal\ConditionService;
 use App\Services\Internal\CreditService;
 use App\Services\Internal\FlowService;
 use Illuminate\Support\ServiceProvider;
@@ -38,6 +42,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind(FlowServiceInterface::class, function () {
             return new FlowService();
+        });
+        $this->app->bind(ConditionServceInterface::class, function () {
+            return new ConditionService();
+        });
+        $this->app->bind(ActionContextServiceInterface::class, function () {
+            return new ActionContextService();
         });
     }
 }

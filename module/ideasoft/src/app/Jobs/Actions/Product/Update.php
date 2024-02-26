@@ -12,13 +12,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use RuleEngine\Facades\RuleEngine;
 
-class ProductUpdate implements ShouldQueue
+class Update implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $connection = "ideasoft_queue";
-
-    public $queue = "ideasoft_product_update_action";
 
     private Message $message;
 
@@ -37,7 +33,6 @@ class ProductUpdate implements ShouldQueue
         AuthenticationServiceInterface $authenticationService
     )
     {
-
         $authentication = $authenticationService->refreshAccessToken($this->message->getAuthentication());
         $data = RuleEngine::evaluate($this->message->getActionContext(), [
             'action' => $this->data, 'trigger' => $this->message->getActionContext()

@@ -16,8 +16,6 @@ class FlowResolver implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $connection = "ideasoft.queue";
-    public $queue = "ideasoft_flow_resolver";
     private Message $message;
 
 
@@ -32,13 +30,13 @@ class FlowResolver implements ShouldQueue
     public function handle(CommunicationServiceInterface $communicationService): void
     {
         $this->message->setStatus(MessageStatus::FlowResolving);
-        $conditions = $communicationService->findCondition($this->message->getFlowId());
+        $conditions = $communicationService->findConditions($this->message->getFlowId());
         if (empty($conditions)){
             $this->message->setStatus(MessageStatus::EmptyCondition);
             return;
         }
         $ruleEvaluated = 0;
-        foreach ($conditions as $condition) {
+        foreach ($conditions['data'] as $condition) {
             if (!RuleEngine::evaluate($condition['condition'], ['trigger' => $this->message->getMessage()])) {
                 continue;
             }
@@ -46,6 +44,7 @@ class FlowResolver implements ShouldQueue
             $this->message->setCondition($condition['condition']);
             $ruleEvaluated = 1;
             //todo: burada mesajlar duplicate edilmeli ama şimdilik sadece 1 adet condtion ekleteceğiz
+            //todo: 404 durumu içinde bir şey yapmamız gerekiyor. communication servislerdeki tüm metodlar için
             $actionContexts = $communicationService->findActions($condition['id']);
             $this->parseActionContext($actionContexts);
         }
@@ -57,9 +56,9 @@ class FlowResolver implements ShouldQueue
 
     private function parseActionContext($actionContexts)
     {
-        foreach ($actionContexts as $actionContext) {
+        foreach ($actionContexts['data'] as $actionContext) {
             //todo: burada mesajlar duplicate edilmeli ama şimdilik sadece 1 adet action ekleteceğiz
-            if ($actionContext['applicationId'] === $this->message->getActionApplicationId()) {
+            if ($actionContext['application_id'] === $this->message->getTriggerApplicationId()) {
                 $this->message->setActionId($actionContext['action_id']);
                 $this->message->setActionContextId($actionContext['id']);
                 $this->message->setActionApplicationId($actionContext['application_id']);

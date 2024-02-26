@@ -29,7 +29,7 @@ class CommunicationService implements CommunicationServiceInterface
         return $response->json();
     }
 
-    public function findCondition($flowId)
+    public function findConditions($flowId)
     {
         $query = ['flowId' => $flowId];
         $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/condition/find', $query);
@@ -40,7 +40,11 @@ class CommunicationService implements CommunicationServiceInterface
 
     public function findActions($conditionId)
     {
-        // TODO: Iburayı yaz
+        $query = ['conditionId' => $conditionId];
+        $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/action-context/find', $query);
+        $response->throw();
+        $response = $response->json();
+        return $response;
     }
 
     public function decrementCredit($userId, $cost)

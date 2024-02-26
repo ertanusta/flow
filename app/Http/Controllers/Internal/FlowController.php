@@ -17,6 +17,9 @@ class FlowController
             $data['applicationId'],
             $data['triggerId']
         );
-        return new FlowResource($flow);
+        if ($flow) {
+            return new FlowResource($flow);
+        }
+        return response()->json([], 404);
     }
 }

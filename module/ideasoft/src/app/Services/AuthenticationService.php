@@ -36,7 +36,7 @@ class AuthenticationService implements AuthenticationServiceInterface
         throw new ResourceNotFoundException("$userId to authentication does not exist");
     }
 
-    public function refreshAccessToken(Authentication $authentication)
+    public function refreshAccessToken(Authentication $authentication): Authentication
     {
         //todo: burası refresh edilecek expire_at e göre
         //önce bir reload et bakalım belki başkası yenilemiştir???
