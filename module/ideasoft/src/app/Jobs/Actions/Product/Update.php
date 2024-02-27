@@ -4,6 +4,7 @@ namespace Ideasoft\Jobs\Actions\Product;
 
 use Ideasoft\Contracts\Client\ClientInterface;
 use Ideasoft\Contracts\Services\AuthenticationServiceInterface;
+use Ideasoft\Contracts\Services\CommunicationServiceInterface;
 use Ideasoft\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +20,7 @@ class Update implements ShouldQueue
     private Message $message;
 
     private $data = [
-        'productUpdate için gerekli olan bilgiler burada olacak'
+        "name" => null
     ];
 
 
@@ -30,25 +31,35 @@ class Update implements ShouldQueue
 
     public function handle(
         ClientInterface                $client,
-        AuthenticationServiceInterface $authenticationService
+        AuthenticationServiceInterface $authenticationService,
+        CommunicationServiceInterface $communicationService
     )
     {
         $authentication = $authenticationService->refreshAccessToken($this->message->getAuthentication());
-        $data = RuleEngine::evaluate($this->message->getActionContext(), [
-            'action' => $this->data, 'trigger' => $this->message->getActionContext()
-        ]);
-
+        //todo: burada bir hata gerçekleşebilir bu yüzden try catch e alınıp kontrol edilmeli ve loglanmalı
+        foreach ($this->message->getActionContext() as $key => $defination) {
+            $this->data[$key] = RuleEngine::evaluate($defination, ['trigger' => (object)$this->message->getMessage()]);
+        }
         //todo: burada datanın kullanıcı tarafından doldurulmasını bekliyorum aslında
         // context tarafı burada kullanıcından gelecek o yüzden null bırakılan alanları temizlemk lazım
-        foreach ($data as $key => $value){
-            if ($value === null){
-                unset($data[$key]);
+        foreach ($this->data as $key => $value) {
+            if ($value === null) {
+                unset($this->data[$key]);
             }
         }
-        $id = $data['id'];
-        unset($data['id']);
-        $response = $client->put($authentication,'/admin-api/products',$id,$data);
-
+        $id = $this->data['id'];
+        unset($this->data['id']);
+        try {
+            $response = $client->put($authentication, '/admin-api/products', $id, $this->data);
+        }catch (\Exception $exception){
+            //todo: burası loglanmalı
+        }
+        $transaction = $communicationService->decrementCredit(
+            $this->message->getUserId(),
+            $this->message->getCost(),
+            $this->message->getProcessId()
+        );
+        $this->message->setTransactionId($transaction['data']['id']);
         //todo: burada kredi düşürülmeli bu işlem için bir API servisi hazırlayıp düzenlemek kolay olacaktır.
     }
 }

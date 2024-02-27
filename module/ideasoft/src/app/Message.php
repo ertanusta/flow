@@ -31,10 +31,27 @@ class Message
     private $status;
     private $message;
     private $actionContext;
+    private $transactionId;
 
     public function __construct($message)
     {
         $this->message = $message;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param mixed $transactionId
+     */
+    public function setTransactionId($transactionId): void
+    {
+        $this->transactionId = $transactionId;
     }
 
     public function getProcessId(): string
@@ -356,10 +373,11 @@ class Message
 
     /**
      * @return mixed
+     * @throws \JsonException
      */
     public function getActionContext()
     {
-        return $this->actionContext;
+        return json_decode($this->actionContext, JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR);
     }
 
     /**

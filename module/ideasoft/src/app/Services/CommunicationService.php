@@ -34,8 +34,7 @@ class CommunicationService implements CommunicationServiceInterface
         $query = ['flowId' => $flowId];
         $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/condition/find', $query);
         $response->throw();
-        $response = $response->json();
-        return $response;
+        return $response->json();
     }
 
     public function findActions($conditionId)
@@ -43,12 +42,14 @@ class CommunicationService implements CommunicationServiceInterface
         $query = ['conditionId' => $conditionId];
         $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/action-context/find', $query);
         $response->throw();
-        $response = $response->json();
-        return $response;
+        return $response->json();
     }
 
-    public function decrementCredit($userId, $cost)
+    public function decrementCredit($userId, $cost, $processId)
     {
-        // TODO: burayı yaz
+        $query = ['userId' => $userId, 'cost' => $cost, 'processId' => $processId];
+        $response = Http::get(AppConstants::CORE_REQUEST_URL . '/internal/user/get-paid', $query);
+        $response->throw();
+        return $response->json();
     }
 }

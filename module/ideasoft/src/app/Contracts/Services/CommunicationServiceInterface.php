@@ -12,5 +12,5 @@ interface CommunicationServiceInterface
 
     public function findActions($conditionId);
 
-    public function decrementCredit($userId,$cost);
+    public function decrementCredit($userId, $cost, $processId);
 }
