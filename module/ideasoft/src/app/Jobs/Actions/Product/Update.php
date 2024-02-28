@@ -5,6 +5,7 @@ namespace Ideasoft\Jobs\Actions\Product;
 use Ideasoft\Contracts\Client\ClientInterface;
 use Ideasoft\Contracts\Services\AuthenticationServiceInterface;
 use Ideasoft\Contracts\Services\CommunicationServiceInterface;
+use Ideasoft\Enums\MessageStatus;
 use Ideasoft\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,34 +33,46 @@ class Update implements ShouldQueue
     public function handle(
         ClientInterface                $client,
         AuthenticationServiceInterface $authenticationService,
-        CommunicationServiceInterface $communicationService
+        CommunicationServiceInterface  $communicationService
     )
     {
-        $authentication = $authenticationService->refreshAccessToken($this->message->getAuthentication());
-        //todo: burada bir hata gerçekleşebilir bu yüzden try catch e alınıp kontrol edilmeli ve loglanmalı
-        foreach ($this->message->getActionContext() as $key => $defination) {
-            $this->data[$key] = RuleEngine::evaluate($defination, ['trigger' => (object)$this->message->getMessage()]);
-        }
-        //todo: burada datanın kullanıcı tarafından doldurulmasını bekliyorum aslında
-        // context tarafı burada kullanıcından gelecek o yüzden null bırakılan alanları temizlemk lazım
-        foreach ($this->data as $key => $value) {
-            if ($value === null) {
-                unset($this->data[$key]);
-            }
-        }
-        $id = $this->data['id'];
-        unset($this->data['id']);
         try {
+            $authentication = $authenticationService->refreshAccessToken($this->message->getAuthentication());
+            $this->message->setStatus(MessageStatus::AuthenticationTokenRefreshed);
+            //todo: burada bir hata gerçekleşebilir bu yüzden try catch e alınıp kontrol edilmeli ve loglanmalı
+            foreach ($this->message->getActionContext() as $key => $defination) {
+                $this->data[$key] = RuleEngine::evaluate($defination, ['trigger' => (object)$this->message->getMessage()]);
+            }
+            $this->message->setStatus(MessageStatus::ActionContextApplied);
+            //todo: burada datanın kullanıcı tarafından doldurulmasını bekliyorum aslında
+            // context tarafı burada kullanıcından gelecek o yüzden null bırakılan alanları temizlemk lazım
+            foreach ($this->data as $key => $value) {
+                if ($value === null) {
+                    unset($this->data[$key]);
+                }
+            }
+            $id = $this->data['id'];
+            unset($this->data['id']);
+
             $response = $client->put($authentication, '/admin-api/products', $id, $this->data);
-        }catch (\Exception $exception){
-            //todo: burası loglanmalı
+            //todo: burada bir şekilde olayı ben mi gerçekleştirdim başkası mı diye kontrol etmek için kayıt etmelisin
+            $this->message->setStatus(MessageStatus::ActionApplied);
+            $transaction = $communicationService->decrementCredit(
+                $this->message->getUserId(),
+                $this->message->getCost(),
+                $this->message->getProcessId()
+            );
+            $this->message->setTransactionId($transaction['data']['id']);
+            $this->message->setStatus(MessageStatus::TransactionCreated);
+            $response = $communicationService->decrementCredit(
+                $this->message->getUserId(),
+                $this->message->getCost(),
+                $this->message->getProcessId()
+            );
+            $this->message->setStatus(MessageStatus::CreditPaid);
+        } catch (\Exception $exception) {
+            $this->message->setStatus(MessageStatus::ActionAppliedFailure);
         }
-        $transaction = $communicationService->decrementCredit(
-            $this->message->getUserId(),
-            $this->message->getCost(),
-            $this->message->getProcessId()
-        );
-        $this->message->setTransactionId($transaction['data']['id']);
-        //todo: burada kredi düşürülmeli bu işlem için bir API servisi hazırlayıp düzenlemek kolay olacaktır.
+        // todo: burada mesajı kayıt etmeliyiz
     }
 }

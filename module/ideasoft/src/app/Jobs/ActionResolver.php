@@ -35,7 +35,8 @@ class ActionResolver implements ShouldQueue
                 $this->message
             );
         }catch (\Exception $e) {
-            dd($e);
+            $this->message->setStatus(MessageStatus::ActionResolveFailure);
+            //todo: failure durumlarını kontrol edebilmek için loglayalım
         }
     }
 }
