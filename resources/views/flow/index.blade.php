@@ -6,10 +6,10 @@
                 <div class="card-header pb-0">
                     <div class="row justify-content-center">
                         <div class="col-6">
-                            <h6>Flow table</h6>
+                            <h6>Akışlar</h6>
                         </div>
                         <div class="col-6 justify-center">
-                            <a href="#" type="button" class="btn bg-gradient-success float-end">New Flow</a>
+                            <a href="#" type="button" class="btn bg-gradient-success float-end">Yeni Akış</a>
                         </div>
                     </div>
                 </div>
@@ -18,19 +18,16 @@
                         <table class="table align-items-center mb-0" id="flow-table">
                             <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Akış Adı
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Event Name
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Action Name
+                                    Olay
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    status
+                                    Durumu
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Working Count
+                                    Çalışma Sayısı
                                 </th>
                                 <th class="text-secondary opacity-7"></th>
                             </tr>
@@ -109,12 +106,7 @@
                         }
                     },
                     {
-                        data: 'eventName', render: function (data, type, row) {
-                            return '<p class="text-xs font-weight-bold mb-0">' + data + '</p>'
-                        }
-                    },
-                    {
-                        data: 'actionName', render: function (data, type, row) {
+                        data: 'trigger_name', render: function (data, type, row) {
                             return '<p class="text-xs font-weight-bold mb-0">' + data + '</p>'
                         }
                     },
@@ -126,7 +118,7 @@
                         }
                     },
                     {
-                        data: 'workingCount', render: function (data, type, row) {
+                        data: 'working_count', render: function (data, type, row) {
                             return '<div class="align-middle text-center text-sm">' +
                                ' <span class="text-secondary text-xs font-weight-bold">'+data+'</span>'
                                 '</div>'

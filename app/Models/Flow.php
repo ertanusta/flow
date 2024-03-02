@@ -21,4 +21,9 @@ class Flow extends AbstractModels
         'status',
         'working_count'
     ];
+
+    public function application()
+    {
+        return $this->hasOne(Application::class,'id','application_id');
+    }
 }

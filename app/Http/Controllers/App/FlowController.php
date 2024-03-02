@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\App;
 
+use App\Contracts\Services\App\FlowServiceInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\App\FlowResource;
 
 class FlowController extends Controller
 {
@@ -11,24 +13,9 @@ class FlowController extends Controller
         return view('flow.index');
     }
 
-    public function all()
+    public function all(FlowServiceInterface $flowService)
     {
-        return response()->json(
-            [
-                "draw" => 1,
-                "recordsTotal" => 1,
-                "recordsFiltered" => 1,
-                "data" => [
-                    [
-                        'id' => 1,
-                        'name' => 'Test1',
-                        'eventName' => 'Application-Event',
-                        'actionName' => 'Application-Action',
-                        'status' => false,
-                        'workingCount' => 431
-                    ]
-                ]
-            ]
-        );
+        $flows = $flowService->getFlows(auth()->user());
+        return FlowResource::collection($flows);
     }
 }
