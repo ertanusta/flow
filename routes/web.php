@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\FlowController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\App\FlowController;
+use App\Http\Controllers\App\HomeController;
+use App\Http\Controllers\App\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*

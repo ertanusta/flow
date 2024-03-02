@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Contracts\Services\App\DashboardServiceInterface;
 use App\Contracts\Services\CommunicationServiceInterface;
 use App\Contracts\Services\Internal\ActionContextServiceInterface;
 use App\Contracts\Services\Internal\ConditionServceInterface;
 use App\Contracts\Services\Internal\CreditServiceInterface;
 use App\Contracts\Services\Internal\FlowServiceInterface;
+use App\Services\App\DashboardService;
 use App\Services\CommunicationService;
 use App\Services\Internal\ActionContextService;
 use App\Services\Internal\ConditionService;
@@ -21,7 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-       $this->registerInternalServices();
+        $this->registerAppServies();
+        $this->registerInternalServices();
     }
 
     /**
@@ -30,6 +33,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+    }
+
+    private function registerAppServies()
+    {
+        $this->app->bind(DashboardServiceInterface::class, function () {
+            return new DashboardService();
+        });
     }
 
     private function registerInternalServices()

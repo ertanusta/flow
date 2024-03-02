@@ -48,6 +48,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function getFlows()
+    {
+        return $this->hasMany(Flow::class, 'user_id', 'id');
+    }
+
+    public function getProcess()
+    {
+        return $this->hasMany(Process::class);
+    }
+
     public function getConnectionName()
     {
         return Config::get('database.connection.core');

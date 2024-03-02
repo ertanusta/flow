@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\App;
 
+use App\Contracts\Services\App\DashboardServiceInterface;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class HomeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(DashboardServiceInterface $dashboardService)
     {
-        return view('dashboard');
+        return view('dashboard',$dashboardService->getCardInfos(auth()->user()));
     }
 
     /**

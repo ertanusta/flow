@@ -7,14 +7,14 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Money</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Kullanılabilir Kredi</p>
                                 <h5 class="font-weight-bolder">
-                                    $53,000
+                                    {{ $avaible_credit }}
                                 </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">+55%</span>
-                                    since yesterday
-                                </p>
+                                <!-- <p class="mb-0">
+                                     <span class="text-success text-sm font-weight-bolder">+55%</span>
+                                     since yesterday
+                                 </p> -->
                             </div>
                         </div>
                         <div class="col-4 text-end">
@@ -33,20 +33,20 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Toplam Akış</p>
                                 <h5 class="font-weight-bolder">
-                                    2,300
+                                    {{ $flow_count }}
                                 </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                    since last week
-                                </p>
+                                <!--   <p class="mb-0">
+                                       <span class="text-success text-sm font-weight-bolder">3%</span>
+                                       since last week
+                                   </p> -->
                             </div>
                         </div>
                         <div class="col-4 text-end">
                             <div
                                 class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                                <i class="ni ni-chat-round text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -59,14 +59,14 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">New Clients</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Gerçekleşen Olay</p>
                                 <h5 class="font-weight-bolder">
-                                    +3,462
+                                    {{ $process_count }}
                                 </h5>
-                                <p class="mb-0">
-                                    <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                                    since last quarter
-                                </p>
+                                <!-- <p class="mb-0">
+                                     <span class="text-danger text-sm font-weight-bolder">-2%</span>
+                                     since last quarter
+                                 </p> -->
                             </div>
                         </div>
                         <div class="col-4 text-end">
@@ -179,136 +179,53 @@
             <div class="card ">
                 <div class="card-header pb-0 p-3">
                     <div class="d-flex justify-content-between">
-                        <h6 class="mb-2">Sales by Country</h6>
+                        <h6 class="mb-2">Son işlemler</h6>
+                        <a href="#"
+                            class="btn btn-link  btn-rounded text-blue icon-move-right my-auto">
+                            Tümü</a>
                     </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table align-items-center ">
                         <tbody>
-                        <tr>
-                            <td class="w-30">
-                                <div class="d-flex px-2 py-1 align-items-center">
-                                    <div>
-                                        <img src="../assets/img/icons/flags/US.png" alt="Country flag">
+                        @foreach($last_processes as $process)
+                            <tr>
+                                <td class="w-30">
+                                    <div class="d-flex px-2 py-1 align-items-center">
+                                        <div class="ms-4">
+                                            <p class="text-xs font-weight-bold mb-0">İşlem ID:</p>
+                                            <h6 class="text-sm mb-0">{{ $process->process_id }}</h6>
+                                        </div>
                                     </div>
-                                    <div class="ms-4">
-                                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                        <h6 class="text-sm mb-0">United States</h6>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <p class="text-xs font-weight-bold mb-0">Olay:</p>
+                                        <h6 class="text-sm mb-0">{{$process->trigger_application_name}}
+                                            - {{ $process->trigger_name }}</h6>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                    <h6 class="text-sm mb-0">2500</h6>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                    <h6 class="text-sm mb-0">$230,900</h6>
-                                </div>
-                            </td>
-                            <td class="align-middle text-sm">
-                                <div class="col text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                    <h6 class="text-sm mb-0">29.9%</h6>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="w-30">
-                                <div class="d-flex px-2 py-1 align-items-center">
-                                    <div>
-                                        <img src="../assets/img/icons/flags/DE.png" alt="Country flag">
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <p class="text-xs font-weight-bold mb-0">Aksiyon:</p>
+                                        <h6 class="text-sm mb-0">{{$process->action_application_name}}
+                                            - {{ $process->action_name }}</h6>
                                     </div>
-                                    <div class="ms-4">
-                                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                        <h6 class="text-sm mb-0">Germany</h6>
+                                </td>
+                                <td class="align-middle text-sm">
+                                    <div class="col text-center">
+                                        <p class="text-xs font-weight-bold mb-0">Akış Durumu:</p>
+                                        <h6 class="text-sm mb-0">{{ $process->status }}</h6>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                    <h6 class="text-sm mb-0">3.900</h6>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                    <h6 class="text-sm mb-0">$440,000</h6>
-                                </div>
-                            </td>
-                            <td class="align-middle text-sm">
-                                <div class="col text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                    <h6 class="text-sm mb-0">40.22%</h6>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="w-30">
-                                <div class="d-flex px-2 py-1 align-items-center">
-                                    <div>
-                                        <img src="../assets/img/icons/flags/GB.png" alt="Country flag">
+                                </td>
+                                <td class="align-middle text-sm">
+                                    <div class="col text-center">
+                                        <p class="text-xs font-weight-bold mb-0">Akış Bedeli:</p>
+                                        <h6 class="text-sm mb-0">{{ $process->cost }}</h6>
                                     </div>
-                                    <div class="ms-4">
-                                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                        <h6 class="text-sm mb-0">Great Britain</h6>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                    <h6 class="text-sm mb-0">1.400</h6>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                    <h6 class="text-sm mb-0">$190,700</h6>
-                                </div>
-                            </td>
-                            <td class="align-middle text-sm">
-                                <div class="col text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                    <h6 class="text-sm mb-0">23.44%</h6>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="w-30">
-                                <div class="d-flex px-2 py-1 align-items-center">
-                                    <div>
-                                        <img src="../assets/img/icons/flags/BR.png" alt="Country flag">
-                                    </div>
-                                    <div class="ms-4">
-                                        <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                        <h6 class="text-sm mb-0">Brasil</h6>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                    <h6 class="text-sm mb-0">562</h6>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                    <h6 class="text-sm mb-0">$143,960</h6>
-                                </div>
-                            </td>
-                            <td class="align-middle text-sm">
-                                <div class="col text-center">
-                                    <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                    <h6 class="text-sm mb-0">32.14%</h6>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

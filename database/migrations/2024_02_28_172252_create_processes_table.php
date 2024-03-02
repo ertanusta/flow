@@ -34,6 +34,7 @@ return new class extends Migration {
             $table->string('message');
             $table->string('action_context');
             $table->string('transaction_id');
+            $table->string('status');
             $table->json('other');
             $table->timestamps();
         });
