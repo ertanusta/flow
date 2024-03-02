@@ -9,7 +9,7 @@
                             <h6>Akışlar</h6>
                         </div>
                         <div class="col-6 justify-center">
-                            <a href="#" type="button" class="btn bg-gradient-success float-end">Yeni Akış</a>
+                            <a href="{{ route('app.flows.create') }}" type="button" class="btn bg-gradient-success float-end">Yeni Akış</a>
                         </div>
                     </div>
                 </div>

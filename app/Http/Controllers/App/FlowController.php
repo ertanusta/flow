@@ -18,4 +18,9 @@ class FlowController extends Controller
         $flows = $flowService->getFlows(auth()->user());
         return FlowResource::collection($flows);
     }
+
+    public function create()
+    {
+        return view('flow.new');
+    }
 }
