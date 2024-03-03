@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App;
 use App\Contracts\Services\App\FlowServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\App\FlowResource;
+use App\Models\Application;
 
 class FlowController extends Controller
 {
@@ -21,6 +22,7 @@ class FlowController extends Controller
 
     public function create()
     {
-        return view('flow.new');
+        $applications = Application::all();
+        return view('flow.new',['applications' => $applications]);
     }
 }

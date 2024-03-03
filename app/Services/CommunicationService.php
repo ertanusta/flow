@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\Services\CommunicationServiceInterface;
+use App\Models\Application;
 use Illuminate\Support\Facades\Redis;
 
 class CommunicationService implements CommunicationServiceInterface
@@ -21,5 +22,11 @@ class CommunicationService implements CommunicationServiceInterface
     public function subscribeFlowResolver(\Closure $callback)
     {
         Redis::connection('core')->subscribe(['flow-resolve'], $callback);
+    }
+
+    public function getApplicationTriggers(Application $application)
+    {
+        // app için internal request atılacak yada bir sınıf yardımıyla (Gateway) doğru adres bulunacak
+        // address defteri gibi
     }
 }
