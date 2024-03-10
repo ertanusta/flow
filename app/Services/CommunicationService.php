@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
+use App\Contants\ModuleRoutes;
 use App\Contracts\Services\CommunicationServiceInterface;
 use App\Models\Application;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 class CommunicationService implements CommunicationServiceInterface
 {
@@ -24,9 +28,11 @@ class CommunicationService implements CommunicationServiceInterface
         Redis::connection('core')->subscribe(['flow-resolve'], $callback);
     }
 
-    public function getApplicationTriggers(Application $application)
+    public function getApplicationTriggers(Application $application, $query = [])
     {
-        // app için internal request atılacak yada bir sınıf yardımıyla (Gateway) doğru adres bulunacak
-        // address defteri gibi
+        $url = ModuleRoutes::getModuleTriggers($application->identifier);
+        $request = Request::create($url,'GET',$query);
+        $response = Route::dispatch($request);
+        return json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
     }
 }

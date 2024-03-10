@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\Repository\ApplicationRepositoryInterface;
 use App\Contracts\Services\App\DashboardServiceInterface;
 use App\Contracts\Services\App\FlowServiceInterface as AppFlowServiceInterface;
 use App\Contracts\Services\CommunicationServiceInterface;
@@ -9,6 +10,7 @@ use App\Contracts\Services\Internal\ActionContextServiceInterface;
 use App\Contracts\Services\Internal\ConditionServceInterface;
 use App\Contracts\Services\Internal\CreditServiceInterface;
 use App\Contracts\Services\Internal\FlowServiceInterface;
+use App\Repository\ApplicationRepository;
 use App\Services\App\DashboardService;
 use App\Services\App\FlowService as AppFlowService;
 use App\Services\CommunicationService;
@@ -25,8 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->registerAppServies();
+        $this->registerAppServices();
         $this->registerInternalServices();
+        $this->registerRepositoryServices();
     }
 
     /**
@@ -37,7 +40,14 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    private function registerAppServies()
+    private function registerRepositoryServices()
+    {
+        $this->app->bind(ApplicationRepositoryInterface::class,function (){
+            return new ApplicationRepository();
+        });
+    }
+
+    private function registerAppServices()
     {
         $this->app->bind(DashboardServiceInterface::class, function () {
             return new DashboardService();

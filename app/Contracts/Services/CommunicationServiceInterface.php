@@ -10,5 +10,5 @@ interface CommunicationServiceInterface
 
     public function subscribeFlowResolver(\Closure $callback);
 
-    public function getApplicationTriggers(Application $application);
+    public function getApplicationTriggers(Application $application,$query = []);
 }
