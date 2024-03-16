@@ -101,7 +101,8 @@
                         <div class="card-header pb-0">
                             <div class="d-flex align-items-center">
                                 <p class="mb-0">Koşul</p>
-                                <button class="btn btn-primary btn-sm ms-auto">Kaydet</button>
+                                <button class="btn btn-primary btn-sm ms-auto" id="condition-save-button">Kaydet
+                                </button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -120,7 +121,12 @@
                                     <div class="form-group">
                                         <label for="condition" class="form-control-label">Koşul</label>
                                         <select class="form-control" id="condition-select" name="condition-select">
-
+                                            <option>Seçiniz</option>
+                                            <option value="=">Eşittir</option>
+                                            <option value=">">Büyüktür</option>
+                                            <option value="<">Küçüktür</option>
+                                            <option value=">=">Büyük Eşittir</option>
+                                            <option value="<=">Küçük Eşittir</option>
                                         </select>
                                     </div>
                                 </div>
@@ -130,6 +136,28 @@
                                         <input class="form-control" type="text" name="condition-value"
                                                id="condition-value">
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="table-responsive p-0">
+                                    <table class="table align-items-center mb-0" id="flow-table">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Uygulama
+                                            </th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Olay
+                                            </th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Koşul
+                                            </th>
+                                            <th class="text-secondary opacity-7"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="condition-body">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -178,6 +206,8 @@
             flow.init();
             $('#application-select').select2();
             $('#actions-application-select').select2();
+            $('#condition-select').select2({width: '100%'});
+            $('#trigger-parameters-select').select2({width: '100%'});
             $('#trigger-select').select2({
                 width: '100%',
                 ajax: {
@@ -190,21 +220,21 @@
                         var query = {
                             search: params.term,
                         }
-                        query.applicationId = flow.triggerApplicationId
+                        query.applicationId = flow.params.triggerApplicationId
                         return query;
                     },
                     processResults: function (data) {
                         var results = [];
                         $.each(data.data, function (index, value) {
-                            console.log(value);
                             results.push({
                                 id: value.id,
-                                text: value.name
+                                text: value.name,
+                                fields: value.fields
                             });
                         });
 
                         return {
-                            "results":results
+                            "results": results
                         };
                     }
                 }
@@ -220,20 +250,75 @@
                 triggerApplicationName: null,
                 triggerId: null,
                 triggerName: null,
-                condition: null,
                 actionApplicationName: null,
                 actionApplicationId: null,
+                conditionTemp: {
+                    triggerParamId: null,
+                    triggerParamName: null,
+                    conditionId: null,
+                    conditionName: null,
+                    value: null,
+                }
+            },
+            conditionTableDelete: function (conditionId) {
+                $('#condition-table-row-id-' + conditionId).remove();
+            },
+            conditionTableAdd: function (conditionObject, conditionId) {
+                //todo: burada aynı condition var ise eklemesin
+                let row = '<tr id="condition-table-row-id-' + conditionId + '" data-condition-table-condition="' + conditionObject.condition + '">' +
+                    '<td class="align-middle"><p class="text-xs font-weight-bold mb-0">' + flow.params.triggerApplicationName + '</p></td>' +
+                    '<td class="align-middle"><p class="text-xs font-weight-bold mb-0">' + flow.params.triggerName + '</p></td>' +
+                    '<td class="align-middle"><p class="text-xs font-weight-bold mb-0">' + conditionObject.conditionShow + '</p></td>' +
+                    '<td class="align-middle"><a onclick="flow.conditionTableDelete(' + conditionId + ')" href="javascript:;"">' +
+                    '<i class="ni ni-2x ni-fat-delete"></i>' +
+                    '</a></td></tr>';
+                document.getElementById('condition-body').innerHTML += row;
+
             },
             listeners: function () {
                 $('#application-select').on('select2:select', function (e) {
-                    flow.triggerApplicationId = e.params.data.id;
-                    flow.triggerApplicationName = e.params.data.text;
+                    flow.params.triggerApplicationId = e.params.data.id;
+                    flow.params.triggerApplicationName = e.params.data.text;
                 });
-                $('#trigger-select').on('select2:opening', function (e) {
+                $('#trigger-select').on('select2:select', function (e) {
+                    flow.params.triggerId = e.params.data.id;
+                    flow.params.triggerName = e.params.data.text;
+                    $('#trigger-parameters-select').val(null).trigger('change');
+                    var newOption = new Option('Seçiniz...', null, false, false);
+                    $('#trigger-parameters-select').append(newOption).trigger('change');
+                    $.each(e.params.data.fields, function (index, value) {
+                        var newOption = new Option(value.name, value.identifier, false, false);
+                        $('#trigger-parameters-select').append(newOption).trigger('change');
+                    });
+                });
+                $('#trigger-parameters-select').on('select2:select', function (e) {
+                    flow.params.conditionTemp.triggerParamId = e.params.data.id;
+                    flow.params.conditionTemp.triggerParamName = e.params.data.text;
+                    console.log(flow.params.conditionTemp);
 
                 });
+                $('#condition-select').on('select2:select', function (e) {
+                    flow.params.conditionTemp.conditionId = e.params.data.id;
+                    flow.params.conditionTemp.conditionName = e.params.data.text;
+                    console.log(flow.params.conditionTemp);
+
+                });
+
                 $('#actions-application-select').on('select2:select', function (e) {
 
+                });
+
+                $('#condition-save-button').on('click', function () {
+                    flow.params.conditionTemp.value = $('#condition-value').val();
+                    let conditionObject = {
+                        condition: flow.params.conditionTemp.triggerParamId +
+                            flow.params.conditionTemp.conditionId +
+                            flow.params.conditionTemp.value,
+                        conditionShow: flow.params.conditionTemp.triggerParamName + ' ' +
+                            flow.params.conditionTemp.conditionId + ' ' +
+                            flow.params.conditionTemp.value
+                    };
+                    flow.conditionTableAdd(conditionObject, Date.now())
                 });
 
             }
