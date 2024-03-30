@@ -23,4 +23,9 @@ class ModuleRoutes
     {
         return self::getBaseRoutes($identifier) . '/triggers';
     }
+
+    public static function getModuleActions($identifier)
+    {
+        return self::getBaseRoutes($identifier) . '/actions';
+    }
 }

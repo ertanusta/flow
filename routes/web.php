@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\ActionController;
 use App\Http\Controllers\App\FlowController;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\ProfileController;
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(func
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/triggers', [TriggerController::class, 'all'])->name('trigger.all');
+    Route::get('/actions', [ActionController::class, 'all'])->name('action.all');
 });
 
 require __DIR__.'/auth.php';

@@ -8,4 +8,6 @@ interface FlowServiceInterface
 {
 
     public function getFlows(User $user);
+
+    public function create(array $flowData);
 }

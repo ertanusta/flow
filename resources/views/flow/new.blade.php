@@ -11,17 +11,9 @@
                         <ul class="nav nav-pills nav-fill p-1" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link mb-0 px-0 py-1 active d-flex align-items-center justify-content-center"
-                                   id="nav-application-tab" data-bs-toggle="tab" data-bs-target="#nav-application"
-                                   role="tab" aria-controls="nav-application" aria-selected="true">
+                                   id="nav-trigger-tab" data-bs-toggle="tab" data-bs-target="#nav-trigger"
+                                   role="tab" aria-controls="nav-trigger" aria-selected="true">
                                     <i class="ni ni-app"></i>
-                                    <span class="ms-2">Uygulama</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center"
-                                   id="nav-trigger-tab" data-bs-toggle="tab" data-bs-target="#nav-trigger" role="tab"
-                                   aria-controls="nav-trigger" aria-selected="false">
-                                    <i class="ni ni-email-83"></i>
                                     <span class="ms-2">Olay</span>
                                 </a>
                             </li>
@@ -52,31 +44,8 @@
     <div class="row">
         <div class="col-12">
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-application" role="tabpanel"
-                     aria-labelledby="nav-application-tab">
-                    <div class="card">
-                        <div class="card-header pb-0">
-                            <div class="d-flex align-items-center">
-                                <p class="mb-0">Uygulamalar</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <select class="form-control" id="application-select" name="application-select">
-                                            <option>Seçiniz...</option>
-                                            @foreach($applications as $application)
-                                                <option value="{{$application->id}}"> {{ $application->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="nav-trigger" role="tabpanel" aria-labelledby="nav-trigger-tab">
+                <div class="tab-pane fade show active" id="nav-trigger" role="tabpanel"
+                     aria-labelledby="nav-trigger-tab">
                     <div class="card">
                         <div class="card-header pb-0">
                             <div class="d-flex align-items-center">
@@ -85,7 +54,20 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="application-select">Uygulama</label>
+                                        <select class="form-control" id="application-select" name="application-select">
+                                            <option>Seçiniz...</option>
+                                            @foreach($applications as $application)
+                                                <option value="{{$application->id}}"> {{ $application->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label for="trigger-select">Olay</label>
                                     <div class="form-group">
                                         <select class="form-control" id="trigger-select" name="trigger-select">
 
@@ -174,26 +156,84 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <label for="actions-application-select" class="form-control-label">Olay
-                                        Parametreleri</label>
-                                    <select class="form-control" id="actions-application-select"
-                                            name="actions-application-select">
-                                        @foreach($applications as $application)
-                                            <option value="{{$application->id}}"> {{ $application->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="form-group">
+                                        <label for="actions-application-select"
+                                               class="form-control-label">Uygulama</label>
+                                        <select class="form-control" id="actions-application-select"
+                                                name="actions-application-select">
+                                            <option> Seçiniz..</option>
+                                            @foreach($applications as $application)
+                                                <option value="{{$application->id}}"> {{ $application->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-12" id="actions-list-div">
-                                    <label for="actions-select" class="form-control-label">Olay Parametreleri</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="actions-select" class="form-control-label">Aksiyon</label>
                                     <select class="form-control" id="actions-select" name="actions-select">
-                                        <option>Seçiniz...</option>
-                                        <option value="product-update">Ürün Güncelle</option>
                                     </select>
                                 </div>
                             </div>
-                            <div id="actions-params-base-div"></div>
                         </div>
                     </div>
+                    <div class="card mt-3" id="actions-params-card" style="display: none">
+                        <div class="card-header pb-0">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal"
+                                        data-bs-target="#triggerParamsModal">Olay Parametreleri
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mt-5" id="actions-params">
+
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-sm ms-auto" id="flow.save-button">Kaydet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="triggerParamsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Olay Paramentreleri</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <small>Olay parametrelerinin kullanım örneği: @{{ trigger.stockAmount }} * 5</small>
+                    </div>
+
+                    <div class="row" id="triggerParameterList">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0" id="trigger-fields-table">
+                                <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Olay Adı
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Kullanımı
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody id="trigger-fields-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn bg-gradient-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -205,7 +245,7 @@
         $(document).ready(function () {
             flow.init();
             $('#application-select').select2();
-            $('#actions-application-select').select2();
+            $('#actions-application-select').select2({width: '100%'});
             $('#condition-select').select2({width: '100%'});
             $('#trigger-parameters-select').select2({width: '100%'});
             $('#trigger-select').select2({
@@ -239,6 +279,37 @@
                     }
                 }
             });
+            $('#actions-select').select2({
+                width: '100%',
+                ajax: {
+                    delay: 250,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route('app.action.all')}}',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                        }
+                        query.applicationId = flow.params.actionApplicationId
+                        return query;
+                    },
+                    processResults: function (data) {
+                        var results = [];
+                        $.each(data.data, function (index, value) {
+                            results.push({
+                                id: value.id,
+                                text: value.name,
+                                fields: value.fields
+                            });
+                        });
+
+                        return {
+                            "results": results
+                        };
+                    }
+                }
+            });
         });
 
         var flow = {
@@ -250,8 +321,10 @@
                 triggerApplicationName: null,
                 triggerId: null,
                 triggerName: null,
+                triggerFields: null,
                 actionApplicationName: null,
                 actionApplicationId: null,
+                actionFields: null,
                 conditionTemp: {
                     triggerParamId: null,
                     triggerParamName: null,
@@ -275,6 +348,13 @@
                 document.getElementById('condition-body').innerHTML += row;
 
             },
+            actionParamsBuild: function (fields) {
+                let html = '';
+                fields.forEach(function (field) {
+                    html += flow.formElementBuilder(field);
+                });
+                document.getElementById('actions-params').innerHTML = html;
+            },
             listeners: function () {
                 $('#application-select').on('select2:select', function (e) {
                     flow.params.triggerApplicationId = e.params.data.id;
@@ -283,6 +363,7 @@
                 $('#trigger-select').on('select2:select', function (e) {
                     flow.params.triggerId = e.params.data.id;
                     flow.params.triggerName = e.params.data.text;
+                    flow.params.triggerFields = e.params.data.fields;
                     $('#trigger-parameters-select').val(null).trigger('change');
                     var newOption = new Option('Seçiniz...', null, false, false);
                     $('#trigger-parameters-select').append(newOption).trigger('change');
@@ -290,6 +371,7 @@
                         var newOption = new Option(value.name, value.identifier, false, false);
                         $('#trigger-parameters-select').append(newOption).trigger('change');
                     });
+                    flow.triggerFieldsListBuild();
                 });
                 $('#trigger-parameters-select').on('select2:select', function (e) {
                     flow.params.conditionTemp.triggerParamId = e.params.data.id;
@@ -305,9 +387,14 @@
                 });
 
                 $('#actions-application-select').on('select2:select', function (e) {
-
+                    flow.params.actionApplicationId = e.params.data.id;
+                    flow.params.actionApplicationName = e.params.data.text;
+                    $('#actions-select').val(null).trigger('change');
                 });
-
+                $('#actions-select').on('select2:select', function (e) {
+                    flow.actionParamsBuild(e.params.data.fields);
+                    document.getElementById('actions-params-card').style.display = 'block';
+                });
                 $('#condition-save-button').on('click', function () {
                     flow.params.conditionTemp.value = $('#condition-value').val();
                     let conditionObject = {
@@ -320,7 +407,37 @@
                     };
                     flow.conditionTableAdd(conditionObject, Date.now())
                 });
+                $('#flow-save-button').on('click', function () {
 
+                })
+
+            },
+            flowSave: function () {
+                // flowu oluştur
+                // flow sonraında condition oluştur
+                    // condition olmak zorunda değil
+                //actionContexti oluştur
+            },
+            formElementBuilder: function (field) {
+                let html = '<div class="col-3"><div class="form-group">' +
+                    '<label for="action-params-' + field.id + '" >' + field.name + '</label>'
+                if (field.type === "input") {
+                    html += '<input type="text" class="form-control" id="action-params-' + field.id + '" required="' + field.required + '" data-action-param-id="' + field.id + '">'
+                }
+                //todo: diğer input tipleri eklenecek
+                html += '</div></div>';
+                return html
+            },
+            triggerFieldsListBuild: function () {
+                console.log(flow.params.triggerFields);
+                let html = "";
+                flow.params.triggerFields.forEach(function (field) {
+                    html += '<tr>' +
+                        '<td class="align-middle"><p class="text-xs font-weight-bold mb-0">' + field.name + '</p></td>' +
+                        '<td class="align-middle"><p class="text-xs font-weight-bold mb-0">' + field.identifier + '</p></td>' +
+                        '</tr>';
+                })
+                document.getElementById('trigger-fields-body').innerHTML = html;
             }
         }
     </script>

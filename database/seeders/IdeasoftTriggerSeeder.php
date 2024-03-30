@@ -24,12 +24,23 @@ class IdeasoftTriggerSeeder extends Seeder
                 'Ürün Güncelleme',
                 'product_update',
                 'fields' => json_encode([
-                    'id',
-                    'name',
-                    'sku',
-                    'stockAmount',
-                    'price'
-                ]),
+                    [
+                        "identifier" => "trigger.id",
+                        "name" => "Ürün Id"
+                    ],
+                    [
+                        "identifier" => "trigger.name",
+                        "name" => "Ürün Adı"
+                    ],
+                    [
+                        "identifier" => "trigger.price1",
+                        "name" => "Ürün Fiyat 1"
+                    ],
+                    [
+                        "identifier" => "trigger.stockAmount",
+                        "name" => "Ürün Stok Sayısı"
+                    ]
+                ], JSON_THROW_ON_ERROR),
                 'is_reader' => false
             ]
         ];
