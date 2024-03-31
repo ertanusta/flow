@@ -10,6 +10,8 @@ use App\Contracts\Services\Internal\ActionContextServiceInterface;
 use App\Contracts\Services\Internal\ConditionServceInterface;
 use App\Contracts\Services\Internal\CreditServiceInterface;
 use App\Contracts\Services\Internal\FlowServiceInterface;
+use App\Models\Flow;
+use App\Observers\FlowObserver;
 use App\Repository\ApplicationRepository;
 use App\Services\App\DashboardService;
 use App\Services\App\FlowService as AppFlowService;
@@ -38,7 +40,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->bootObservers();
+    }
+
+    private function bootObservers()
+    {
+        Flow::observe(FlowObserver::class);
     }
 
     private function registerRepositoryServices()

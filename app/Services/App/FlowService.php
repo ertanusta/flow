@@ -44,13 +44,11 @@ class FlowService implements FlowServiceInterface
                 ->thenReturn();
             DB::commit();
         } catch (HandlerException $exception) {
-            dd($exception);
             DB::rollBack();
-            //todo: handler exceptionlara dikkat et
+            //todo: handler exceptionlara dikkat et düzgün response sağla
         } catch (\Exception $e) {
-            dd($e);
             DB::rollBack();
-            //todo: hadlerExceptionlara dikkat et
+            //todo: hadlerExceptionlara dikkat et düzgün response sağla
         }
         return $message;
     }

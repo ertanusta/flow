@@ -32,7 +32,7 @@ class FlowController extends Controller
     {
         /** @var FlowCreatorMessage $message */
         $message = $flowService->create($request->validationData());
-        // todo: buraya düzgün bir response dönmemiz lazım
+        // todo: buraya düzgün bir response dönmemiz lazım tasarım tarafında güzel modal şeyleri var
        return response()->json('Okey Abi');
     }
 }

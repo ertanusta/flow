@@ -27,7 +27,6 @@ class ActionContextCreatorHandler implements FlowCreatorInterface
             $applicationActionResponse = $this->communicationService
                 ->getApplicationActionById($application, $message->content['actionId']);
         } catch (\Exception $exception) {
-            dd($exception);
             throw new HandlerException($exception->getMessage(), $exception->getCode());
         }
 
