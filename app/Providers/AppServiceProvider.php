@@ -18,6 +18,7 @@ use App\Services\Internal\ActionContextService;
 use App\Services\Internal\ConditionService;
 use App\Services\Internal\CreditService;
 use App\Services\Internal\FlowService;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerRepositoryServices()
     {
-        $this->app->bind(ApplicationRepositoryInterface::class,function (){
+        $this->app->bind(ApplicationRepositoryInterface::class, function () {
             return new ApplicationRepository();
         });
     }
@@ -53,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
             return new DashboardService();
         });
         $this->app->bind(AppFlowServiceInterface::class, function () {
-            return new AppFlowService();
+            return new AppFlowService($this->app->make(Pipeline::class));
         });
     }
 

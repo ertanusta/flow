@@ -192,7 +192,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary btn-sm ms-auto" id="flow.save-button">Kaydet</button>
+                            <button class="btn btn-primary btn-sm ms-auto" id="flow-save-button">Kaydet</button>
                         </div>
                     </div>
                 </div>
@@ -325,6 +325,8 @@
                 actionApplicationName: null,
                 actionApplicationId: null,
                 actionFields: null,
+                actionId: null,
+                actionName: null,
                 conditionTemp: {
                     triggerParamId: null,
                     triggerParamName: null,
@@ -394,6 +396,8 @@
                 $('#actions-select').on('select2:select', function (e) {
                     flow.actionParamsBuild(e.params.data.fields);
                     document.getElementById('actions-params-card').style.display = 'block';
+                    flow.params.actionId = e.params.data.id;
+                    flow.params.actionName = e.params.data.text;
                 });
                 $('#condition-save-button').on('click', function () {
                     flow.params.conditionTemp.value = $('#condition-value').val();
@@ -408,15 +412,48 @@
                     flow.conditionTableAdd(conditionObject, Date.now())
                 });
                 $('#flow-save-button').on('click', function () {
-
+                    flow.flowSave();
                 })
 
             },
             flowSave: function () {
-                // flowu oluştur
-                // flow sonraında condition oluştur
-                    // condition olmak zorunda değil
-                //actionContexti oluştur
+                let conditions = document.querySelectorAll('[data-condition-table-condition]');
+                let condition = "";
+                let actionParams = document.querySelectorAll('[data-action-param-id]');
+                let context = [];
+                if (conditions.length) {
+                    conditions.forEach(function (item) {
+                        condition += item.dataset.conditionTableCondition + "&&";
+                    });
+                    condition += 1; //todo: burayı kaldır amk bu ne
+                } else {
+                    condition += "true"
+                }
+                actionParams.forEach(function (item) {
+                    context[item.dataset.actionParamId] = item.value;
+                });
+                
+                let body = {
+                    triggerApplicationId: flow.params.triggerApplicationId,
+                    triggerId: flow.params.triggerId,
+                    triggerName: flow.params.triggerName,
+                    condition: condition,
+                    actionApplicationId: flow.params.actionApplicationId,
+                    actionId: flow.params.actionId,
+                    context: JSON.stringify(Object.assign({}, context)),
+                }
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: "{{ route('app.flows.store') }}",
+                    data: body,
+                    success: function (response) {
+                        console.log(response)
+                    }
+                });
+
             },
             formElementBuilder: function (field) {
                 let html = '<div class="col-3"><div class="form-group">' +

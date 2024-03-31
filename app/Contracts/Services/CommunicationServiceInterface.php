@@ -15,4 +15,7 @@ interface CommunicationServiceInterface
     public function getApplicationActions(Application $application, $query = []);
 
     public function getApplicationTriggerById(Application $application, $id);
+
+    public function getApplicationActionById(Application $application, $id);
+
 }

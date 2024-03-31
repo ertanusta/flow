@@ -3,6 +3,7 @@
 namespace App\Http\Requests\App;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class FlowCreateRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class FlowCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,20 @@ class FlowCreateRequest extends FormRequest
         return [
             'triggerName' => 'required',
             'triggerId' => 'required',
-            'applicationId' => 'required',
+            'triggerApplicationId' => 'required',
+            'condition' => 'required',
+
+            'actionApplicationId' => 'required',
+            'actionId' => 'required',
+            'context' => 'required',
         ];
     }
+
+   public function validationData()
+   {
+       $validatedData = parent::validationData();
+       $validatedData['userId'] = Auth::user()->id;
+       $validatedData['name'] = 'testFrontEnd'; //todo: burayı frontendden besleyeceğiz
+       return $validatedData;
+   }
 }

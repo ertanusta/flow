@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\App\FlowCreateRequest;
 use App\Http\Resources\App\FlowResource;
 use App\Models\Application;
+use App\Services\App\Pipeline\FlowCreator\FlowCreatorMessage;
 
 class FlowController extends Controller
 {
@@ -29,12 +30,9 @@ class FlowController extends Controller
 
     public function store(FlowCreateRequest $request, FlowServiceInterface $flowService)
     {
-        $flow = $flowService->create($request->validationData());
-        /*
-         * beginTransaction
-         * Flowu oluştur
-         * condition oluştur
-         * actionContexti oluştur.
-         */
+        /** @var FlowCreatorMessage $message */
+        $message = $flowService->create($request->validationData());
+        // todo: buraya düzgün bir response dönmemiz lazım
+       return response()->json('Okey Abi');
     }
 }

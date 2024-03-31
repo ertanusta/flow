@@ -50,4 +50,12 @@ class CommunicationService implements CommunicationServiceInterface
         $response = Route::dispatch($request);
         return json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
     }
+
+    public function getApplicationActionById(Application $application, $id)
+    {
+        $url = ModuleRoutes::getModuleActions($application->identifier);
+        $request = Request::create($url . '/' . $id);
+        $response = Route::dispatch($request);
+        return json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+    }
 }

@@ -12,4 +12,10 @@ class ActionController extends Controller
         //todo: request parametresine göre ayarla search geliyor
         return ActionResource::collection(Action::all());
     }
+
+    public function show($id)
+    {
+        $action = Action::query()->where('id', $id)->firstOrFail();
+        return new ActionResource($action);
+    }
 }

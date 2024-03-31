@@ -23,4 +23,5 @@ enum MessageStatus: string
     case ActionAppliedFailure = "action_applied_failure";
     case TransactionCreated = "transaction_created";
     case CreditPaid = "credit_paid";
+    case AuthenticationTokenRefreshed = "authentication_token_refreshed";
 }

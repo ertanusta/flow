@@ -4,7 +4,9 @@ namespace App\Services\App\Pipeline\FlowCreator;
 
 use App\Contracts\Services\CommunicationServiceInterface;
 use App\Contracts\Services\Pipeline\FlowCreator\FlowCreatorInterface;
+use App\Exceptions\HandlerException;
 use App\Models\Application;
+use App\Models\Flow;
 use App\Models\User;
 
 class FlowCreatorHandler implements FlowCreatorInterface
@@ -23,13 +25,26 @@ class FlowCreatorHandler implements FlowCreatorInterface
         $user = User::query()->where('id', '=', $message->content['userId'])->firstOrFail();
         $message->user = $user;
         /** @var Application $application */
-        $application = Application::query()->where('id', '=', $message->content['applicationId'])->firstOrFail();
+        $application = Application::query()->where('id', '=', $message->content['triggerApplicationId'])->firstOrFail();
         $message->application = $application;
 
-        //todo: triggerı id ye göre bulma rotasını ekle applicationa
-        $applicationTriggerResponse = $this->communicationService
-            ->getApplicationTriggerById($application, $message->content['triggerId']);
-        // burada response var mı yok mu bir bak var ise ona göre message objesine set et
+        try {
+            $applicationTriggerResponse = $this->communicationService
+                ->getApplicationTriggerById($application, $message->content['triggerId']);
+        } catch (\Exception $exception) {
+            throw new HandlerException($exception->getMessage(), $exception->getCode());
+        }
+        $message->triggerContent = $applicationTriggerResponse['data'];
+        $flow = Flow::create([
+            'name' => $message->getFlowName(),
+            'user_id' => $message->user->id,
+            'application_id' => $message->application->id,
+            'status' => true,
+            'working_count' => 0,
+            'trigger_id' => $message->triggerContent['id'],
+            'trigger_name' => $message->triggerContent['name']
+        ]);
+        $message->flow = $flow;
         $next($message);
     }
 }

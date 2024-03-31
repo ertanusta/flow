@@ -3,6 +3,8 @@
 namespace App\Services\App\Pipeline\FlowCreator;
 
 use App\Models\Application;
+use App\Models\Condition;
+use App\Models\Flow;
 use App\Models\User;
 
 class FlowCreatorMessage
@@ -19,4 +21,16 @@ class FlowCreatorMessage
 
     public Application $application;
 
+    public Flow $flow;
+
+    public Condition $condition;
+
+    public array $triggerContent = [];
+
+    public array $actionContent = [];
+
+    public function getFlowName()
+    {
+        return $this->content['name'];
+    }
 }
