@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
 @endsection
 @section('profile')
     <div class="card shadow-lg mx-4 card-profile-bottom">
@@ -46,32 +48,39 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-trigger" role="tabpanel"
                      aria-labelledby="nav-trigger-tab">
-                    <div class="card">
-                        <div class="card-header pb-0">
-                            <div class="d-flex align-items-center">
-                                <p class="mb-0">Olaylar</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="application-select">Uygulama</label>
-                                        <select class="form-control" id="application-select" name="application-select">
-                                            <option>Seçiniz...</option>
-                                            @foreach($applications as $application)
-                                                <option value="{{$application->id}}"> {{ $application->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="card" style="width: 40%">
+                            <div class="card-header pb-0">
+                                <div class=" ">
+                                    <p class="mb-0">Olaylar</p>
                                 </div>
-
-                                <div class="col-md-12">
-                                    <label for="trigger-select">Olay</label>
-                                    <div class="form-group">
-                                        <select class="form-control" id="trigger-select" name="trigger-select">
-
-                                        </select>
+                            </div>
+                            <div class="d-flex justify-content-center container">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="application-select">Uygulama</label>
+                                                <select class="form-control" id="application-select"
+                                                        name="application-select" style="width: 100%;">
+                                                    <option></option>
+                                                    @foreach($applications as $application)
+                                                        <option
+                                                            value="{{$application->id}}"> {{ $application->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" id="trigger-select-div" style="display: none;">
+                                            <label for="trigger-select">Olay</label>
+                                            <div class="form-group">
+                                                <select class="form-control" id="trigger-select" name="trigger-select"
+                                                        style="width: 100%">
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -150,7 +159,6 @@
                         <div class="card-header pb-0">
                             <div class="d-flex align-items-center">
                                 <p class="mb-0">Aksiyon</p>
-                                <button class="btn btn-primary btn-sm ms-auto">Kaydet</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -192,7 +200,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary btn-sm ms-auto" id="flow-save-button">Kaydet</button>
+                            <button type="button" class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal"
+                                    data-bs-target="#modal-save-action">Kaydet
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -238,18 +248,62 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-save-action" tabindex="-1" role="dialog" aria-labelledby="modal-save-action"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="card card-plain">
+                        <div class="card-header pb-0 text-left">
+                            <p class="mb-0">Son bir kaç adım</p>
+                        </div>
+                        <div class="card-body">
+                            <div role="form text-left">
+                                <label for="flow-name">Akış Adı</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Akış adı" id="flow-name">
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-sm ms-auto" id="flow-save-button">Kaydet</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
             flow.init();
-            $('#application-select').select2();
-            $('#actions-application-select').select2({width: '100%'});
-            $('#condition-select').select2({width: '100%'});
-            $('#trigger-parameters-select').select2({width: '100%'});
+            $('#application-select').select2({
+                placeholder: "Uygulama Seçiniz",
+                theme: 'bootstrap-5',
+                selectionCssClass: "select2--small", // For Select2 v4.1
+                dropdownCssClass: "select2--small",
+                width: 'style',
+            });
+            $('#actions-application-select').select2({
+                theme: 'bootstrap-5',
+                width: '200'
+            });
+            $('#condition-select').select2({
+                theme: 'bootstrap-5',
+                width: '50%'
+            });
+            $('#trigger-parameters-select').select2({
+                theme: 'bootstrap-5',
+                width: '50%'
+            });
             $('#trigger-select').select2({
-                width: '100%',
+                placeholder: "Olay Seçiniz",
+                theme: 'bootstrap-5',
+                selectionCssClass: "select2--small", // For Select2 v4.1
+                dropdownCssClass: "select2--small",
+                width: 'style',
                 ajax: {
                     delay: 250,
                     headers: {
@@ -280,7 +334,8 @@
                 }
             });
             $('#actions-select').select2({
-                width: '100%',
+                theme: 'bootstrap-5',
+                width: '50%',
                 ajax: {
                     delay: 250,
                     headers: {
@@ -361,6 +416,9 @@
                 $('#application-select').on('select2:select', function (e) {
                     flow.params.triggerApplicationId = e.params.data.id;
                     flow.params.triggerApplicationName = e.params.data.text;
+                    flow.params.triggerName = null;
+                    flow.params.triggerId = null;
+                    $('#trigger-select-div').css('display', 'block');
                 });
                 $('#trigger-select').on('select2:select', function (e) {
                     flow.params.triggerId = e.params.data.id;
@@ -432,7 +490,7 @@
                 actionParams.forEach(function (item) {
                     context[item.dataset.actionParamId] = item.value;
                 });
-                
+
                 let body = {
                     triggerApplicationId: flow.params.triggerApplicationId,
                     triggerId: flow.params.triggerId,
@@ -441,6 +499,7 @@
                     actionApplicationId: flow.params.actionApplicationId,
                     actionId: flow.params.actionId,
                     context: JSON.stringify(Object.assign({}, context)),
+                    name: $('#flow-name').val()
                 }
                 $.ajax({
                     headers: {

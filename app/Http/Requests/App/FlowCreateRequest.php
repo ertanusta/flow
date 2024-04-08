@@ -27,7 +27,7 @@ class FlowCreateRequest extends FormRequest
             'triggerId' => 'required',
             'triggerApplicationId' => 'required',
             'condition' => 'required',
-
+            'name'  => 'required',
             'actionApplicationId' => 'required',
             'actionId' => 'required',
             'context' => 'required',
@@ -38,7 +38,6 @@ class FlowCreateRequest extends FormRequest
    {
        $validatedData = parent::validationData();
        $validatedData['userId'] = Auth::user()->id;
-       $validatedData['name'] = 'testFrontEnd'; //todo: burayı frontendden besleyeceğiz
        return $validatedData;
    }
 }
