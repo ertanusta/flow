@@ -9,7 +9,8 @@
                             <h6>Akışlar</h6>
                         </div>
                         <div class="col-6 justify-center">
-                            <a href="{{ route('app.flows.create') }}" type="button" class="btn bg-gradient-success float-end">Yeni Akış</a>
+                            <a href="{{ route('app.flows.create') }}" type="button"
+                               class="btn bg-gradient-success float-end">Yeni Akış</a>
                         </div>
                     </div>
                 </div>
@@ -21,6 +22,9 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Akış Adı
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Uygulama
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                     Olay
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -28,6 +32,9 @@
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     Çalışma Sayısı
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+
                                 </th>
                                 <th class="text-secondary opacity-7"></th>
                             </tr>
@@ -93,6 +100,12 @@
                     data: function (params) {
                         return params;
                     },
+                    dataSrc: function (json) {
+                        json.draw = json.meta.current_page;
+                        json.recordsFiltered = json.meta.to;
+                        json.recordsTotal = json.meta.total;
+                        return json.data;
+                    }
                 },
                 columns: [
                     {
@@ -103,6 +116,11 @@
                                 '<h6 class="mb-0 text-sm">' + data + '</h6> ' +
                                 ' </div>' +
                                 '</div>'
+                        }
+                    },
+                    {
+                        data: 'application', render: function (data, type, row) {
+                            return '<p class="text-xs font-weight-bold mb-0">' + data + '</p>'
                         }
                     },
                     {
@@ -120,8 +138,17 @@
                     {
                         data: 'working_count', render: function (data, type, row) {
                             return '<div class="align-middle text-center text-sm">' +
-                               ' <span class="text-secondary text-xs font-weight-bold">'+data+'</span>'
-                                '</div>'
+                                ' <span class="text-secondary text-xs font-weight-bold">' + data + '</span>'
+                            '</div>'
+                        }
+                    },
+                    {
+                        data: '', render: function (data, type, row) {
+                            return '<div class="align-middle text-center text-sm">' +
+                                '<span style="cursor: pointer" onclick="deleteFlow('+row.id+')" class="badge badge-sm bg-gradient-danger">' +
+                                'Sil' +
+                                '</span>' +
+                                '</div>';
                         }
                     },
                 ],
@@ -137,5 +164,21 @@
                 }
             });
         });
+
+        function deleteFlow(id){
+            let url = "{{ route('app.flows.destroy','_id') }}";
+            url =url.replace('_id',id);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "DELETE",
+                url: url,
+                success: function (response) {
+                    console.log('okey');
+                    $('#flow-table').DataTable().ajax.reload();
+                }
+            });
+        }
     </script>
 @endsection

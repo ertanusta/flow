@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\App\FlowCreateRequest;
 use App\Http\Resources\App\FlowResource;
 use App\Models\Application;
+use App\Models\Flow;
 use App\Services\App\Pipeline\FlowCreator\FlowCreatorMessage;
 
 class FlowController extends Controller
@@ -34,5 +35,11 @@ class FlowController extends Controller
         $message = $flowService->create($request->validationData());
         // todo: buraya düzgün bir response dönmemiz lazım tasarım tarafında güzel modal şeyleri var
        return response()->json('Okey Abi');
+    }
+
+    public function destroy(Flow $flow)
+    {
+        $flow->delete();
+        return response()->json('Okey');
     }
 }

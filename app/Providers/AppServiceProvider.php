@@ -20,6 +20,7 @@ use App\Services\Internal\ActionContextService;
 use App\Services\Internal\ConditionService;
 use App\Services\Internal\CreditService;
 use App\Services\Internal\FlowService;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\ServiceProvider;
 

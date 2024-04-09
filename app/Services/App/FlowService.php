@@ -22,7 +22,7 @@ class FlowService implements FlowServiceInterface
         $this->pipeline = $pipeline;
     }
 
-    public function getFlows(User $user)
+    public function getFlows(User $user, $query = [])
     {
         return $user->getFlows()
             ->with('application')

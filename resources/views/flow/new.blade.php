@@ -467,13 +467,11 @@
                 $('#trigger-parameters-select').on('select2:select', function (e) {
                     flow.params.conditionTemp.triggerParamId = e.params.data.id;
                     flow.params.conditionTemp.triggerParamName = e.params.data.text;
-                    console.log(flow.params.conditionTemp);
 
                 });
                 $('#condition-select').on('select2:select', function (e) {
                     flow.params.conditionTemp.conditionId = e.params.data.id;
                     flow.params.conditionTemp.conditionName = e.params.data.text;
-                    console.log(flow.params.conditionTemp);
 
                 });
 
@@ -541,7 +539,7 @@
                     url: "{{ route('app.flows.store') }}",
                     data: body,
                     success: function (response) {
-                        console.log(response)
+                        //todo: burada bir response çıkarıp yolumuza bakalım
                     }
                 });
 
@@ -557,7 +555,6 @@
                 return html
             },
             triggerFieldsListBuild: function () {
-                console.log(flow.params.triggerFields);
                 let html = "";
                 flow.params.triggerFields.forEach(function (field) {
                     html += '<tr>' +

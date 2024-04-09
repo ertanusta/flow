@@ -7,7 +7,7 @@ use App\Models\User;
 interface FlowServiceInterface
 {
 
-    public function getFlows(User $user);
+    public function getFlows(User $user, $query = []);
 
     public function create(array $flowData);
 }
