@@ -1,8 +1,23 @@
 @extends('layouts.app')
 @section('css')
+    <style>
+        .select2-selection__rendered {
+            line-height: 37px !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+            border-radius: 0.5rem !important;
+        }
+
+        .select2-selection__arrow {
+            height: 37px !important;
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css"/>
 @endsection
 @section('profile')
     <div class="card shadow-lg mx-4 card-profile-bottom">
@@ -111,7 +126,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="condition" class="form-control-label">Koşul</label>
-                                        <select class="form-control" id="condition-select" name="condition-select">
+                                        <select class="form-control" id="condition-select" name="condition-select"
+                                                style="line-height: 1.4rem;">
                                             <option>Seçiniz</option>
                                             <option value="=">Eşittir</option>
                                             <option value=">">Büyüktür</option>
@@ -155,54 +171,61 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-action" role="tabpanel" aria-labelledby="nav-action-tab">
-                    <div class="card">
-                        <div class="card-header pb-0">
-                            <div class="d-flex align-items-center">
-                                <p class="mb-0">Aksiyon</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="actions-application-select"
-                                               class="form-control-label">Uygulama</label>
-                                        <select class="form-control" id="actions-application-select"
-                                                name="actions-application-select">
-                                            <option> Seçiniz..</option>
-                                            @foreach($applications as $application)
-                                                <option value="{{$application->id}}"> {{ $application->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="card" style="width: 40%">
+                            <div class="card-header pb-0">
+                                <div class="d-flex align-items-center">
+                                    <p class="mb-0">Aksiyon</p>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="actions-select" class="form-control-label">Aksiyon</label>
-                                    <select class="form-control" id="actions-select" name="actions-select">
-                                    </select>
+                            <div class="d-flex justify-content-center container">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="actions-application-select"
+                                                       class="form-control-label">Uygulama</label>
+                                                <select class="form-control" id="actions-application-select"
+                                                        name="actions-application-select">
+                                                    <option> Seçiniz..</option>
+                                                    @foreach($applications as $application)
+                                                        <option
+                                                            value="{{$application->id}}"> {{ $application->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="actions-select" class="form-control-label">Aksiyon</label>
+                                            <select class="form-control" id="actions-select" name="actions-select">
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card mt-3" id="actions-params-card" style="display: none">
-                        <div class="card-header pb-0">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal"
-                                        data-bs-target="#triggerParamsModal">Olay Parametreleri
+                    <div class="d-flex justify-content-center">
+                        <div class="card mt-3" id="actions-params-card" style="display: none">
+                            <div class="card-header pb-0">
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal"
+                                            data-bs-target="#triggerParamsModal">Olay Parametreleri
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mt-5" id="actions-params">
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal"
+                                        data-bs-target="#modal-save-action">Kaydet
                                 </button>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row mt-5" id="actions-params">
-
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal"
-                                    data-bs-target="#modal-save-action">Kaydet
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -288,15 +311,21 @@
             });
             $('#actions-application-select').select2({
                 theme: 'bootstrap-5',
-                width: '200'
+                selectionCssClass: "select2--small", // For Select2 v4.1
+                dropdownCssClass: "select2--small",
+                width: 'style',
             });
             $('#condition-select').select2({
                 theme: 'bootstrap-5',
-                width: '50%'
+                selectionCssClass: "select2--small", // For Select2 v4.1
+                dropdownCssClass: "select2--small",
+                width: 'style',
             });
             $('#trigger-parameters-select').select2({
                 theme: 'bootstrap-5',
-                width: '50%'
+                selectionCssClass: "select2--small", // For Select2 v4.1
+                dropdownCssClass: "select2--small",
+                width: 'style',
             });
             $('#trigger-select').select2({
                 placeholder: "Olay Seçiniz",
@@ -335,7 +364,9 @@
             });
             $('#actions-select').select2({
                 theme: 'bootstrap-5',
-                width: '50%',
+                selectionCssClass: "select2--small", // For Select2 v4.1
+                dropdownCssClass: "select2--small",
+                width: 'style',
                 ajax: {
                     delay: 250,
                     headers: {
@@ -458,6 +489,7 @@
                     flow.params.actionName = e.params.data.text;
                 });
                 $('#condition-save-button').on('click', function () {
+                    //todo: aynı conditionı seçmemesini sağlamalıyı mıyız?
                     flow.params.conditionTemp.value = $('#condition-value').val();
                     let conditionObject = {
                         condition: flow.params.conditionTemp.triggerParamId +
