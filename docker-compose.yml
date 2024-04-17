@@ -1,5 +1,6 @@
 services:
-    laravel.test:
+    flow.app:
+        container_name: 'flow.app'
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
@@ -22,11 +23,12 @@ services:
         networks:
             - sail
         depends_on:
-            - pgsql-core
-            - pgsql-ideasoft
-            - redis
-    pgsql-core:
-        container_name: 'pgsql-core'
+            - flow.pgsql-core
+            - flow.pgsql-ideasoft
+            - flow.redis
+            - flow.mysql
+    flow.pgsql-core:
+        container_name: 'flow.pgsql-core'
         image: 'postgres:15'
         ports:
             - '5432:5432'
@@ -51,9 +53,9 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
-    pgsql-ideasoft:
+    flow.pgsql-ideasoft:
+        container_name: 'flow.pgsql-ideasoft'
         image: 'postgres:15'
-        container_name: 'pgsql-ideasoft'
         ports:
             - '5433:5432'
         environment:
@@ -77,7 +79,8 @@ services:
                 - '${IDEASOFT_DB_USERNAME}'
             retries: 3
             timeout: 5s
-    redis:
+    flow.redis:
+        container_name: 'flow.redis'
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
@@ -92,18 +95,43 @@ services:
                 - ping
             retries: 3
             timeout: 5s
-    mongodb:
-        container_name: mongodb
-        image: mongo:latest
+    flow.mongodb:
+        container_name: 'flow.mongodb'
+        image: 'mongo:latest'
         ports:
-            - "27017:27017"
+            - '27017:27017'
         networks:
             - sail
         healthcheck:
-            test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017 --quiet
+            test: 'echo ''db.runCommand("ping").ok'' | mongosh mongodb:27017 --quiet'
             interval: 10s
             timeout: 10s
             retries: 5
+    flow.mysql:
+        container_name: 'flow.mysql'
+        image: 'mysql/mysql-server:8.0'
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'sail-mysql:/var/lib/mysql'
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - mysqladmin
+                - ping
+                - '-p${DB_PASSWORD}'
+            retries: 3
+            timeout: 5s
 networks:
     sail:
         driver: bridge
@@ -112,3 +140,6 @@ volumes:
         driver: local
     sail-redis:
         driver: local
+    sail-mysql:
+        driver: local
+

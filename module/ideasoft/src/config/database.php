@@ -2,7 +2,7 @@
 
 return [
         'driver' => 'pgsql',
-        'host' => 'pgsql-ideasoft',
+        'host' => 'flow.pgsql-ideasoft',
         'port' => '5432',
         'database' => 'ideasoft',
         'username' => 'ideasoft',

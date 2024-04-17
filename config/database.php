@@ -66,7 +66,7 @@ return [
         'core' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-            'host' => 'pgsql-core',
+            'host' => 'flow.pgsql-core',
             'port' => '5432',
             'database' => 'flow',
             'username' => 'sail',
@@ -94,7 +94,7 @@ return [
         ],
         'mongo' => [
             'driver' => 'mongodb',
-            'host' => 'mongodb',
+            'host' => 'flow.mongodb',
             'port' => 27017,
             'database' => env('MONGO_DB_DATABASE','processes'),
             'username' => env('MONGO_DB_USERNAME',''),
