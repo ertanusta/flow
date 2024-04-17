@@ -21,8 +21,8 @@ class IdeasoftTriggerSeeder extends Seeder
     {
         return [
             [
-                'Ürün Güncelleme',
-                'product_update',
+                'name' => 'Ürün Güncelleme',
+                'identifier' => 'product_update',
                 'fields' => json_encode([
                     [
                         "identifier" => "trigger.id",

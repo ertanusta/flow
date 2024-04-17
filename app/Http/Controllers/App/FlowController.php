@@ -9,6 +9,8 @@ use App\Http\Resources\App\FlowResource;
 use App\Models\Application;
 use App\Models\Flow;
 use App\Services\App\Pipeline\FlowCreator\FlowCreatorMessage;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class FlowController extends Controller
 {
@@ -17,10 +19,15 @@ class FlowController extends Controller
         return view('flow.index');
     }
 
-    public function all(FlowServiceInterface $flowService)
+    public function all(Request $request, FlowServiceInterface $flowService)
     {
+        /** @var LengthAwarePaginator $flows */
         $flows = $flowService->getFlows(auth()->user());
-        return FlowResource::collection($flows);
+        $collection = FlowResource::collection($flows);
+        $collection->additional['draw'] = $request->get('draw');
+        $collection->additional['recordsFiltered'] = $flows->total();
+        $collection->additional['recordsTotal'] = $flows->total();
+        return $collection;
     }
 
     public function create()
@@ -34,7 +41,7 @@ class FlowController extends Controller
         /** @var FlowCreatorMessage $message */
         $message = $flowService->create($request->validationData());
         // todo: buraya düzgün bir response dönmemiz lazım tasarım tarafında güzel modal şeyleri var
-       return response()->json('Okey Abi');
+        return response()->json('Okey Abi');
     }
 
     public function destroy(Flow $flow)

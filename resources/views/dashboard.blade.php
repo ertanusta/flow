@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('breadcrumb')
+    <h6 class="font-weight-bolder text-white mb-0">Dashboard</h6>
+@endsection
 @section('content')
     <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">

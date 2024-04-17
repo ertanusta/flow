@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('breadcrumb')
+    <h6 class="font-weight-bolder text-white mb-0">Akışlar</h6>
+@endsection
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -99,14 +102,9 @@
                     type: 'GET',
                     data: function (params) {
                         return params;
-                    },
-                    dataSrc: function (json) {
-                        json.draw = json.meta.current_page;
-                        json.recordsFiltered = json.meta.to;
-                        json.recordsTotal = json.meta.total;
-                        return json.data;
                     }
                 },
+                deferRender: true,
                 columns: [
                     {
                         data: 'name',
@@ -143,9 +141,9 @@
                         }
                     },
                     {
-                        data: '', render: function (data, type, row) {
+                        render: function (data, type, row) {
                             return '<div class="align-middle text-center text-sm">' +
-                                '<span style="cursor: pointer" onclick="deleteFlow('+row.id+')" class="badge badge-sm bg-gradient-danger">' +
+                                '<span style="cursor: pointer" onclick="deleteFlow(' + row.id + ')" class="badge badge-sm bg-gradient-danger">' +
                                 'Sil' +
                                 '</span>' +
                                 '</div>';
@@ -165,9 +163,9 @@
             });
         });
 
-        function deleteFlow(id){
+        function deleteFlow(id) {
             let url = "{{ route('app.flows.destroy','_id') }}";
-            url =url.replace('_id',id);
+            url = url.replace('_id', id);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
